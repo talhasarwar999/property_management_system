@@ -1,0 +1,13 @@
+.env
+settings.json
+.DS_Store
+*.pyc
+venv/
+.vscode/
+.idea
+.idea*
+__pycache__*
+__pycache__/
+.ebextensions/
+*.pyc
+.pyc

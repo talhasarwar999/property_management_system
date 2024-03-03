@@ -1,0 +1,214 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 | Registration Page</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{% static "./plugins/fontawesome-free/css/all.min.css" %}">
+  <!-- icheck bootstrap -->
+  <link rel="stylesheet" href="{% static "./plugins/icheck-bootstrap/icheck-bootstrap.min.css" %}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{% static "./css/adminlte.min.css" %}">
+  <style>
+    #notification-container {
+      position: fixed;
+      top: 5px;
+      /* Adjust as needed */
+      right: 520px;
+      /* Adjust as needed */
+      z-index: 9999;
+      width: 400px;
+      /* Adjust as needed */
+    }
+  
+    .notification {
+      display: flex;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+      padding: 7px 10px;
+      align-items: center;
+    }
+  
+    .notification-icon {
+      font-size: 20px;
+      margin-right: 10px;
+    }
+  
+    .notification-icon i {
+      font-size: 30px;
+    }
+  
+    .notification-text {
+      flex-grow: 1;
+      font-size: 17px;
+    }
+  
+    /* Add styles for different notification types using classes like .success, .error, .info, etc. */
+    .notification.success {
+      background-color: #14A44D;
+      color: white;
+    }
+  
+    .notification.error {
+      background-color: #DC4C64;
+      color: white;
+    }
+  
+    .notification.info {
+      background-color: #2196F3;
+      color: white;
+    }
+  
+    .notification-close {
+      font-size: 30px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body class="hold-transition register-page">
+  {% if messages %}
+  <div id="notification-container">
+    {% for message in messages %}
+    <div class="notification {% if message.tags == 'success' %}success{% elif message.tags == 'error' %}error{% endif %}">
+      <span class="notification-icon">
+        {% if message.tags == 'success' %}
+        <i class="fas fa-check-circle"></i> <!-- Use an appropriate icon for success -->
+        {% elif message.tags == 'error' %}
+        <i class="fas fa-times-circle"></i> <!-- Use an appropriate icon for error -->
+        {% endif %}
+      </span>
+      <span class="notification-text">{{ message|escapejs|safe }}</span>
+      <!-- <span class="notification-close" onclick="removeNotification(this)">×</span> -->
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <script>
+    // Function to remove the notification element
+    //function removeNotification(element) {
+    //	element.parentElement.style.display = 'none';
+    //}
+
+    // Automatically remove notifications after 3 seconds
+    setTimeout(function () {
+      var notifications = document.querySelectorAll('.notification');
+      notifications.forEach(function (notification) {
+        notification.style.display = 'none';
+      });
+    }, 4000);
+  </script>
+<div class="register-box">
+  <div class="register-logo">
+    <a href="">Code<b>Genesis</b></a>
+  </div>
+
+  <div class="card">
+    <div class="card-body register-card-body">
+      <p class="login-box-msg">Register a new membership</p>
+
+      <form action="{% url 'signup' %}" method="post">
+        {% csrf_token %}
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" name="username" placeholder="Username" required>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-user"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="email" class="form-control" name="email" placeholder="Email" required>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-envelope"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="text" name="company_name" class="form-control" placeholder="Company Name" required>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-box"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="number" name="contact_number" class="form-control" placeholder="Contact" required>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-box"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" name="address" placeholder="Address">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-box"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" name="website" placeholder="Webiste">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-box"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="password" class="form-control" name="password1" placeholder="Password" required>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="password" class="form-control" name="password2" placeholder="Retype password" required>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-8">
+            <div class="icheck-primary">
+              <input type="checkbox" id="agreeTerms" name="terms" value="agree" required>
+              <label for="agreeTerms">
+               I agree to the <a href="#">terms</a>
+              </label>
+            </div>
+          </div>
+          <!-- /.col -->
+          <div class="col-4">
+            <button type="submit" class="btn btn-primary btn-block">Register</button>
+          </div>
+          <!-- /.col -->
+        </div>
+      </form>
+
+      <a href="login.html" class="text-center">Login</a>
+    </div>
+    <!-- /.form-box -->
+  </div><!-- /.card -->
+</div>
+<!-- /.register-box -->
+
+<!-- jQuery -->
+<script src="{% static "./plugins/jquery/jquery.min.js" %}"></script>
+<!-- Bootstrap 4 -->
+<script src="{% static "./plugins/bootstrap/js/bootstrap.bundle.min.js" %}"></script>
+<!-- AdminLTE App -->
+<script src="{% static "./dist/js/adminlte.min.js" %}"></script>
+</body>
+</html>

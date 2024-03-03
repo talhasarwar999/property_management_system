@@ -1,0 +1,305 @@
+{% extends "base.html" %}
+{% block title %}Table{% endblock %}
+{% block content %}
+{% load static %}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Create Property</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{% url 'property-manager-dashboard' %}">Home</a></li>
+                        <li class="breadcrumb-item active">Property</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    {% if messages %}
+    <div id="notification-container">
+        {% for message in messages %}
+        <div
+            class="notification {% if message.tags == 'success' %}success{% elif message.tags == 'error' %}error{% endif %}">
+            <span class="notification-icon">
+                {% if message.tags == 'success' %}
+                <i class="fas fa-check-circle"></i> <!-- Use an appropriate icon for success -->
+                {% elif message.tags == 'error' %}
+                <i class="fas fa-times-circle"></i> <!-- Use an appropriate icon for error -->
+                {% endif %}
+            </span>
+            <span class="notification-text">{{ message|escapejs|safe }}</span>
+            <!-- <span class="notification-close" onclick="removeNotification(this)">×</span> -->
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <script>
+        // Function to remove the notification element
+        //function removeNotification(element) {
+        //	element.parentElement.style.display = 'none';
+        //}
+
+        // Automatically remove notifications after 3 seconds
+        setTimeout(function () {
+            var notifications = document.querySelectorAll('.notification');
+            notifications.forEach(function (notification) {
+                notification.style.display = 'none';
+            });
+        }, 4000);
+    </script>
+    <style>
+       .form-group label {
+                font-weight: 400 !important;
+        }
+    </style>
+    <!-- Main content -->
+    <section style="background-color: #eee;">
+        <div class="container py-1">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <form action="{% url 'create-property' %}" method="POST" class="form" id="kt_form" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <!--begin: Wizard Step 1-->
+                                <div>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <!--begin::Input-->
+                                            <div class="form-group">
+                                                <label>Title<span style="color:red;">*</span></label>
+                                                <input type="text" required class="form-control form-control-solid"
+                                                    name="title" placeholder="Title"/>
+                                            </div>
+                                            <!--end::Input-->
+                                        </div>
+                                        <div class="col-md-3">
+                                            <!--begin::Input-->
+                                            <div class="form-group">
+                                                <label>Address<span style="color:red;">*</span></label>
+                                                <input type="text" required class="form-control form-control-solid"
+                                                    name="address" placeholder="Address"
+                                                    onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32)" />
+                                            </div>
+                                            <!--end::Input-->
+                                        </div>
+                                        <div class="col-md-3">
+                                            <!--begin::Input-->
+                                            <div class="form-group">
+                                                <label>Property Type<span style="color:red;">*</span></label>
+                                                        <select class="form-control form-control-solid"
+                                                            required name="property_type">
+                                                            <option value="">Select an option</option>
+                                                            <option value="rented">Rented</option>
+                                                            <option value="sold">sold</option>
+                                                            <option value="free">Free</option>
+                                                            <option value="off-plan">Off Plan</option>
+                                                        </select>
+                                            </div>
+                                            <!--end::Input-->
+                                        </div>
+                                        <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Property Status<span style="color:red;">*</span></label>
+                                            <select class="form-control " required name="status">
+                                                <option value="">Select an option</option>
+                                                <option value="available">Available</option>
+                                                <option value="not available">Not Available</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <!--end::Input-->
+                                    <!--begin::Input-->
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <!--begin::Input-->
+                                            <div class="form-group">
+                                                <label>Location</label>
+                                                <input type="text" class="form-control form-control-solid" name="location"
+                                                    placeholder="Location" value="" />
+                                            </div>
+                                            <!--end::Input-->
+                                        </div>
+                                        <div class="col-md-3">
+                                            <!--begin::Input-->
+                                            <div class="form-group">
+                                                <label>Country<span style="color:red;">*</span></label>
+                                                <input type="text" required class="form-control form-control-solid"
+                                                    name="country" placeholder="Country" value="" />
+                                            </div>
+                                            <!--end::Input-->
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>City<span style="color:red;">*</span></label>
+                                                <input type="text" required class="form-control form-control-solid"
+                                                    name="city" placeholder="City" value="" />
+                                            </div>
+                                            <!--end::Input-->
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>State<span style="color:red;">*</span></label>
+                                            <input type="text" required class="form-control form-control-solid" name="state" placeholder="State"
+                                                value="" />
+                                        </div>
+                                        <!--end::Input-->
+                                    </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <!--begin::Input-->
+                                            <div class="form-group">
+                                                <label>EST Rent</label>
+                                                <input type="number" class="form-control form-control-solid "
+                                                    name="est_rent" placeholder="EST Rent" value="" />
+                                            </div>
+                                            <!--end::Input-->
+                                        </div>
+                            
+                                        <div class="col-md-3">
+                                            <!--begin::Input-->
+                                            <div class="form-group">
+                                                <label>Total Area</label>
+                                                <input type="number" required class="form-control form-control-solid" name="total_area"
+                                                    placeholder="Total Area" value="" />
+                                            </div>
+                                            <!--end::Input-->
+                                        </div>
+                                        <div class="col-md-3">
+                                            <!--begin::Input-->
+                                            <div class="form-group">
+                                                <label>No. of Rooms</label>
+                                                <input type="number" class="form-control form-control-solid" name="num_rooms" placeholder="No. of Rooms" />
+                                            </div>
+                                            <!--end::Input-->
+                                        </div>
+                                        <div class="col-md-3">
+                                            <!--begin::Input-->
+                                            <div class="form-group">
+                                                <label>No. of BathRooms</label>
+                                                <input type="number" class="form-control form-control-solid" name="num_bathrooms" placeholder="No. of Bathrooms" />
+                                            </div>
+                                            <!--end::Input-->
+                                        </div>
+                                    </div>
+                            
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>ETD</label>
+                                                <input type="date" class="form-control "
+                                                    name="est_delivery_time" value="" placeholder="ETD">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Construction Year</label>
+                                                <input type="number" class="form-control form-control-solid" name="construction_year" value=""
+                                                    placeholder="Year">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="mr-4">Has Swimming Pool</label>
+                                                <input type="checkbox" class="mt-5" name="has_swimming_pool" value=""
+                                                  >
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="mr-4">Has Garden</label>
+                                                <input type="checkbox" class="mt-5" name="has_garden" value="" >
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="mr-4">Has Garage</label>
+                                                <input type="checkbox" class="mt-5" name="has_garage" value="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="form-group">
+                                                <label>Listing Details</label>
+                                            <textarea type="text-area" class="form-control" name="listing_details" value=""
+                                                rows="3"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h3>Images Upload</h3>
+
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="imageUpload">Upload Images</label>
+                                                <input type="file" class="form-control-file" id="imageUpload" name="images" accept="image/jpeg, image/png, image/gif, image/bmp" multiple>
+                                                <script>
+                                                    document.getElementById('imageUpload').onchange = function (event) {
+                                                        var output = document.getElementById('imageUploads');
+                                                        output.innerHTML = ''; // Clear current preview
+                                                        for (var i = 0; i < event.target.files.length; i++) {
+                                                            var file = event.target.files[i];
+                                                            output.innerHTML += '<li>' + file.name + '</li>'; // Display file names
+                                                        }
+                                                    };
+                                                </script>
+                                                <ul id="imageUploads"></ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <h3>Files Upload</h3>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="imageUpload">Upload Files</label>
+                                                <input type="file" class="form-control-file" id="fileUpload" name="documents"
+                                                    accept=".pdf, .doc, .docx, .xls, .xlsx, .txt" multiple>
+                                                <script>
+                                                    document.getElementById('fileUpload').onchange = function (event) {
+                                                        var output = document.getElementById('fileUploads');
+                                                        output.innerHTML = ''; // Clear current preview
+                                                        for (var i = 0; i < event.target.files.length; i++) {
+                                                            var file = event.target.files[i];
+                                                            output.innerHTML += '<li>' + file.name + '</li>'; // Display file names
+                                                        }
+                                                    };
+                                                </script>
+                                                <ul id="fileUploads"></ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                            
+                            
+                            
+                                </div>
+                                <!--end: Wizard Step 1-->
+                                <!--begin: Wizard Actions-->
+                                <div class="d-flex float-right">
+                                    <div>
+                                        <button type="submit" class="btn btn-success font-weight-bolder text-uppercase">Submit</button>
+                                    </div>
+                                </div>
+                                <!--end: Wizard Actions-->
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div></div>
+
+</div>
+</section>
+<!-- /.content -->
+</div>
+{% endblock %}

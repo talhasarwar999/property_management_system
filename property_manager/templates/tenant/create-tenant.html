@@ -1,0 +1,310 @@
+{% extends "base.html" %}
+{% block title %}Table{% endblock %}
+{% block content %}
+{% load static %}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Create Tenant</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{% url 'property-manager-dashboard' %}">Home</a></li>
+                        <li class="breadcrumb-item active">Tenant</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    {% if messages %}
+    <div id="notification-container">
+        {% for message in messages %}
+        <div
+            class="notification {% if message.tags == 'success' %}success{% elif message.tags == 'error' %}error{% endif %}">
+            <span class="notification-icon">
+                {% if message.tags == 'success' %}
+                <i class="fas fa-check-circle"></i> <!-- Use an appropriate icon for success -->
+                {% elif message.tags == 'error' %}
+                <i class="fas fa-times-circle"></i> <!-- Use an appropriate icon for error -->
+                {% endif %}
+            </span>
+            <span class="notification-text">{{ message|escapejs|safe }}</span>
+            <!-- <span class="notification-close" onclick="removeNotification(this)">×</span> -->
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <script>
+        // Function to remove the notification element
+        //function removeNotification(element) {
+        //	element.parentElement.style.display = 'none';
+        //}
+
+        // Automatically remove notifications after 3 seconds
+        setTimeout(function () {
+            var notifications = document.querySelectorAll('.notification');
+            notifications.forEach(function (notification) {
+                notification.style.display = 'none';
+            });
+        }, 4000);
+    </script>
+    <style>
+        .form-group label {
+            font-weight: 400 !important;
+        }
+    </style>
+    <!-- Main content -->
+    <section style="background-color: #eee;">
+        <div class="container py-1">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <form action="{% url 'create-tenant' %}" method="POST" class="form" id="kt_form"
+                                enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <!--begin: Wizard Step 1-->
+                                <div>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <!--begin::Input-->
+                                            <div class="form-group">
+                                                <label>Property<span style="color:red;">*</span></label>
+                                                <select class="form-control form-control-solid" required
+                                                    name="property">
+                                                    <option value="">Select an option</option>
+                                                    {% for property in properties %}
+                                                    <option value="{{property.id}}">{{property.title}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <!--end::Input-->
+                                        </div>
+                                        <div class="col-md-3">
+                                            <!--begin::Input-->
+                                            <div class="form-group">
+                                                <label>Name<span style="color:red;">*</span></label>
+                                                <input type="text" required class="form-control form-control-solid"
+                                                    name="name" placeholder="Name" />
+                                            </div>
+                                            <!--end::Input-->
+                                        </div>
+                                        <div class="col-md-6">
+                                            <!--begin::Input-->
+                                            <div class="form-group">
+                                                <label>Contact Number<span style="color:red;">*</span></label>
+                                                <input type="text" required class="form-control form-control-solid"
+                                                    name="contact_number" placeholder="Contact Number" />
+                                            </div>
+                                            <!--end::Input-->
+                                        </div>
+                                    </div>
+                                    <!--end::Input-->
+
+
+
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <!--begin::Input-->
+                                            <div class="form-group">
+                                                <label>Email<span style="color:red;">*</span></label>
+                                                <input type="email" required class="form-control form-control-solid"
+                                                    name="email" placeholder="Email" />
+                                            </div>
+                                            <!--end::Input-->
+                                        </div>
+                                        <div class="col-md-3">
+                                            <!--begin::Input-->
+                                            <div class="form-group">
+                                                <label>Username<span style="color:red;">*</span></label>
+                                                <input type="text" required class="form-control form-control-solid"
+                                                    name="username" placeholder="Username" />
+                                            </div>
+                                            <!--end::Input-->
+                                        </div>
+                                        <div class="col-md-3">
+                                            <!--begin::Input-->
+                                            <div class="form-group">
+                                                <label>Password<span style="color:red;">*</span></label>
+                                                <input type="password" required class="form-control form-control-solid"
+                                                    name="password" placeholder="Contact Number" />
+                                            </div>
+                                            <!--end::Input-->
+                                        </div>
+                                        <div class="col-md-3">
+                                            <!--begin::Input-->
+                                            <div class="form-group">
+                                                <label>Confirm Password<span style="color:red;">*</span></label>
+                                                <input type="password" required class="form-control form-control-solid"
+                                                    name="confirm_password" placeholder="Confirm Password" />
+                                            </div>
+                                            <!--end::Input-->
+                                        </div>
+                                    </div>
+
+                                    <!--begin::Input-->
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <!--begin::Input-->
+                                            <div class="form-group">
+                                                <label>Country</label>
+                                                <input type="text" required class="form-control form-control-solid"
+                                                    name="country" placeholder="Country" value="" />
+                                            </div>
+                                            <!--end::Input-->
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>City</label>
+                                                <input type="text" required class="form-control form-control-solid"
+                                                    name="city" placeholder="City" value="" />
+                                            </div>
+                                            <!--end::Input-->
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>State<span style="color:red;">*</span></label>
+                                                <input type="text" required class="form-control form-control-solid"
+                                                    name="state" placeholder="State" value="" />
+                                            </div>
+                                            <!--end::Input-->
+                                        </div>
+                                        <div class="col-md-3">
+                                            <!--begin::Input-->
+                                            <div class="form-group">
+                                                <label>Address</label>
+                                                <input type="text" class="form-control form-control-solid"
+                                                    name="address" placeholder="Address" value="" />
+                                            </div>
+                                            <!--end::Input-->
+                                        </div>
+                                    </div>
+                                    <div class="row">
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Lease Start Date<span style="color:red;">*</span></label>
+                                                <input type="date" class="form-control " required
+                                                    name="lease_start_date" value="" placeholder="LSD">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Lease End Date<span style="color:red;">*</span></label>
+                                                <input type="date" class="form-control " required name="lease_end_date"
+                                                    value="" placeholder="LED">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Rent Amount<span style="color:red;">*</span></label>
+                                                <input type="number" required class="form-control form-control-solid"
+                                                    name="rent_amount" value="" placeholder="Rent Amount">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Security Deposit<span style="color:red;">*</span></label>
+                                                <input type="number" required class="form-control form-control-solid"
+                                                    name="security_deposit" value="" placeholder="Security Deposit">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Annual Income</label>
+                                                <input type="number" class="form-control form-control-solid"
+                                                    name="annual_income" value="" placeholder="Annual Income">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="mr-4">Picture</label>
+                                                <input type="file" class="mt-" name="logo" value="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="mr-4">Document</label>
+                                                <input type="file" class="" name="agreement_document" value="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="mr-4">Is Verified</label>
+                                                <input type="checkbox" class="mt-5" name="is_verified" value="">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Payment History</label>
+                                                <textarea type="text-area" class="form-control" name="payment_history"
+                                                    value="" rows="3"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Notes</label>
+                                                <textarea type="text-area" class="form-control" name="notes" value=""
+                                                    rows="3"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h3>Images Upload</h3>
+
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="imageUpload">Upload Images</label>
+                                                <input type="file" class="form-control-file" id="imageUpload"
+                                                    name="images" accept="image/jpeg, image/png, image/gif, image/bmp"
+                                                    multiple>
+                                                <script>
+                                                    document.getElementById('imageUpload').onchange = function (event) {
+                                                        var output = document.getElementById('imageUploads');
+                                                        output.innerHTML = ''; // Clear current preview
+                                                        for (var i = 0; i < event.target.files.length; i++) {
+                                                            var file = event.target.files[i];
+                                                            output.innerHTML += '<li>' + file.name + '</li>'; // Display file names
+                                                        }
+                                                    };
+                                                </script>
+                                                <ul id="imageUploads"></ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                                <!--end: Wizard Step 1-->
+                                <!--begin: Wizard Actions-->
+                                <div class="d-flex float-right">
+                                    <div>
+                                        <button type="submit"
+                                            class="btn btn-success font-weight-bolder text-uppercase">Submit</button>
+                                    </div>
+                                </div>
+                                <!--end: Wizard Actions-->
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+</div>
+</section>
+<!-- /.content -->
+</div>
+{% endblock %}

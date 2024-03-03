@@ -1,0 +1,297 @@
+{% extends "base.html" %}
+{% block title %}Table{% endblock %}
+{% block content %}
+{% load static %}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Tenant Details</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{% url 'property-manager-dashboard' %}">Home</a></li>
+                        <li class="breadcrumb-item active">Tenant</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    {% if messages %}
+    <div id="notification-container">
+        {% for message in messages %}
+        <div
+            class="notification {% if message.tags == 'success' %}success{% elif message.tags == 'error' %}error{% endif %}">
+            <span class="notification-icon">
+                {% if message.tags == 'success' %}
+                <i class="fas fa-check-circle"></i> <!-- Use an appropriate icon for success -->
+                {% elif message.tags == 'error' %}
+                <i class="fas fa-times-circle"></i> <!-- Use an appropriate icon for error -->
+                {% endif %}
+            </span>
+            <span class="notification-text">{{ message|escapejs|safe }}</span>
+            <!-- <span class="notification-close" onclick="removeNotification(this)">×</span> -->
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <script>
+        // Function to remove the notification element
+        //function removeNotification(element) {
+        //	element.parentElement.style.display = 'none';
+        //}
+
+        // Automatically remove notifications after 3 seconds
+        setTimeout(function () {
+            var notifications = document.querySelectorAll('.notification');
+            notifications.forEach(function (notification) {
+                notification.style.display = 'none';
+            });
+        }, 4000);
+    </script>
+    <!-- Main content -->
+    <section style="background-color: #eee;">
+        <div class="container py-1">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Tenant Name</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{tenant.name|default:"---------"}}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Property</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <a href="{% url 'view-property' tenant.property.id %}" class="text-muted mb-0">{{tenant.property.title}}</a>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Username</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{tenant.user.username}}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Email</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{tenant.user.email}}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Contact Number</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{tenant.contact_number}}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Country</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{tenant.country}}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">City</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{tenant.city}}</p>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">State</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{tenant.state}}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">EST Rent</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{tenant.est_rent}}</p>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Address</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{tenant.address}}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Lease Start Date</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{tenant.lease_start_date}}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Lease End Date</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{tenant.lease_end_date}}</p>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Rent Amount</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{tenant.rent_amount}}</p>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Security Deposit</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{tenant.security_deposit}}</p>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Payment History</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{tenant.payment_history}}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Annual Income</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{tenant.annual_income}}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Picture</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    {% if tenant.logo %}
+                                    <img src="{{ tenant.logo.url }}" class="rounded-circle img-fluid" style="width: 150px;">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Notes</p>
+                                </div>
+                                <hr>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{tenant.notes}}</p>
+                                    
+                                </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Is Verified</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{tenant.is_verified}}</p>
+                                
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div></div>
+           
+            <div class="container">
+                <h4>Tenant Images</h4>
+            <div class="row">
+                
+                {% if tenant.images.all %}
+                {% for image in tenant.images.all %}
+                <div class="col-lg-3">
+                    <div class="card text-center">
+                        <img src="{{ image.image.url }}" class="card-img-top"
+                            alt="Waterfall"  style="height: 250px;">
+                        <div class="card-body">
+                            {% if image.description %}
+                            <p class="card-text">
+                              {{image.description}}
+                            </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p>No images available for this property.</p>
+                {% endif %}
+    </div>
+        </div>
+
+
+        <div class="container">
+            <h4>Tenant Document</h4>
+            <div class="row">
+        
+                {% if tenant.agreement_document %}
+                <div class="col-lg-3">
+                    <div class="card text-center">
+                        <a href="{{ tenant.agreement_document.file.url }}" class="mt-4" download>{{ tenant.agreement_document.file.name }}</a>
+                        <hr>
+                    </div>
+                </div>
+                {% else %}
+                <p>No images available for this property.</p>
+                {% endif %}
+            </div>
+        </div>
+
+</div>
+</section>
+<!-- /.content -->
+</div>
+{% endblock %}
