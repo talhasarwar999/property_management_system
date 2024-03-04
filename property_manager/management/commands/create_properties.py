@@ -15,7 +15,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         for _ in range(50):
             # Assume PropertyDealer and Broker are populated or create dummy ones as needed
-            owner = PropertyDealer.objects.get(user__username='admin1231')
+            owner = PropertyDealer.objects.get(user__username='saad')
             # broker, _ = Broker.objects.get_or_create(name="Dummy Broker", defaults={'details': 'Dummy broker details'})
 
             # Generate and save a dummy image
