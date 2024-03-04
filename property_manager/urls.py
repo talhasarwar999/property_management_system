@@ -14,6 +14,7 @@ urlpatterns = [
     path("delete-property/<pk>/", views.delete_property, name="delete-property"),
     path("view-property/<pk>/", views.view_property, name="view-property"),
     path("create-property/", views.create_property, name="create-property"),
+    path("edit-property/<pk>/", views.edit_property, name="edit-property"),
 
     # Tenant urls
     path("tenant-list/", views.tenant_list, name="tenant-list"),
