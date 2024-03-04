@@ -86,7 +86,7 @@
                         <td>{{ property.city }}</td>
                         <td>
                             <a href="{% url 'view-property' property.id %}"><span class="fas fa-eye text-primary"></span></a>
-                            <a href=""><span class="fas fa-edit text-success"></span></a>
+                            <a href="{% url 'edit-property' property.id %}"><span class="fas fa-edit text-success"></span></a>
                             <a href="{% url 'delete-property' property.id %}"><span class="fas fa-trash text-danger"></span></a>
                         </td>
                     </tr>

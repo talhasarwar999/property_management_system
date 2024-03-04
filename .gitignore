@@ -11,5 +11,9 @@ __pycache__/
 .ebextensions/
 *.pyc
 .pyc
+
+=======
+__pycache__*
+__pycache__/
 media*
 media/

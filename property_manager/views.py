@@ -111,7 +111,7 @@ def property_list(request):
     page_number = request.GET.get("page")
     properties = paginator.get_page(page_number)
     context = {
-        'properties': properties
+        'properties': properties,
     }
     return render(request, "property/property-list.html", context)
 
@@ -193,6 +193,54 @@ def create_property(request):
                     messages.error(request, f"{field}, {error}")
                     return redirect("create-property")
     return render(request, "property/create-property.html")
+
+
+@login_required(login_url="signin")
+@property_dealer_required
+def edit_property(request, pk):
+    """
+    Edit details of a specific property
+    """
+
+    try:
+        property = Property.objects.get(id=pk)
+    except:
+        messages.error(request, "Property ID does not exist")
+        return redirect("property-list")
+    if request.method == "POST":
+        form = PropertyForm(request.POST, request.FILES, instance=property)
+        if form.is_valid():
+            instance = form.save(commit=False)
+
+            remove_images = request.POST.getlist('remove_images')
+            for image_id in remove_images:
+                image = Image.objects.get(id=image_id)
+                image.delete()
+
+            remove_documents = request.POST.getlist('remove_documents')
+            for document_id in remove_documents:
+                document = Document.objects.get(id=document_id)
+                document.delete()
+
+            images = request.FILES.getlist('images')
+            for image in images:
+                image_instance = Image(image=image)
+                image_instance.save()
+                instance.images.add(image_instance)
+
+            instance.save()
+            messages.success(request, "Property Updated successfully")
+            return redirect("property-list")
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}, {error}")
+
+
+    context = {
+        'property': property
+    }
+    return render(request, "property/edit-property.html", context)
 
 
 # ================ Property Views Start =================
@@ -320,6 +368,7 @@ def edit_tenant(request, pk):
 
     try:
         tenant = Tanant.objects.get(id=pk)
+        tenant_document_agreement = tenant.agreement_document
         tenant_username = tenant.user.username
         properties = Property.objects.filter(owner__user=request.user, owner__user__is_property_dealer=True)
     except:
@@ -336,10 +385,12 @@ def edit_tenant(request, pk):
                 image.delete()
 
             file = request.FILES.get('agreement_document')
-            if file:
+            if 'agreement_document' in request.FILES:
                 file_instance = Document(file=file)
                 file_instance.save()
                 instance.agreement_document = file_instance
+            else:
+                instance.agreement_document = tenant_document_agreement
 
             images = request.FILES.getlist('images')
             for image in images:
