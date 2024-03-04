@@ -8,12 +8,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Create Tenant</h1>
+                    <h1 class="m-0">Edit broker</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{% url 'property-manager-dashboard' %}">Home</a></li>
-                        <li class="breadcrumb-item active">Tenant</li>
+                        <li class="breadcrumb-item active">broker</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -39,12 +39,6 @@
     </div>
     {% endif %}
     <script>
-        // Function to remove the notification element
-        //function removeNotification(element) {
-        //	element.parentElement.style.display = 'none';
-        //}
-
-        // Automatically remove notifications after 3 seconds
         setTimeout(function () {
             var notifications = document.querySelectorAll('.notification');
             notifications.forEach(function (notification) {
@@ -53,8 +47,8 @@
         }, 4000);
     </script>
     <style>
-        .form-group label {
-            font-weight: 400 !important;
+       .form-group label {
+                font-weight: 400 !important;
         }
     </style>
     <!-- Main content -->
@@ -65,8 +59,7 @@
                 <div class="col-lg-12">
                     <div class="card mb-4">
                         <div class="card-body">
-                            <form action="{% url 'create-tenant' %}" method="POST" class="form" id="kt_form"
-                                enctype="multipart/form-data">
+                            <form action="{% url 'edit-broker' broker.id %}" method="POST" class="form" id="kt_form" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 <!--begin: Wizard Step 1-->
                                 <div>
@@ -75,11 +68,10 @@
                                             <!--begin::Input-->
                                             <div class="form-group">
                                                 <label>Property<span style="color:red;">*</span></label>
-                                                <select class="form-control form-control-solid" required
-                                                    name="property">
+                                                <select class="form-control form-control-solid" required name="property">
                                                     <option value="">Select an option</option>
                                                     {% for property in properties %}
-                                                    <option value="{{property.id}}">{{property.title}}</option>
+                                                    <option value="{{property.id}}" {% if broker.property.id == property.id%}selected{%endif%}>{{property.title}}</option>
                                                     {% endfor %}
                                                 </select>
                                             </div>
@@ -90,7 +82,7 @@
                                             <div class="form-group">
                                                 <label>Name<span style="color:red;">*</span></label>
                                                 <input type="text" required class="form-control form-control-solid"
-                                                    name="name" placeholder="Name" />
+                                                    name="name" value="{{broker.name}}" placeholder="Name" />
                                             </div>
                                             <!--end::Input-->
                                         </div>
@@ -98,8 +90,7 @@
                                             <!--begin::Input-->
                                             <div class="form-group">
                                                 <label>Contact Number<span style="color:red;">*</span></label>
-                                                <input type="text" required class="form-control form-control-solid"
-                                                    name="contact_number" placeholder="Contact Number" />
+                                                <input type="text" value="{{broker.contact_number}}" required class="form-control form-control-solid" name="contact_number" placeholder="Contact Number" />
                                             </div>
                                             <!--end::Input-->
                                         </div>
@@ -109,39 +100,19 @@
 
 
                                     <div class="row">
-                                        <div class="col-md-3">
+                                        <div class="col-md-6">
                                             <!--begin::Input-->
                                             <div class="form-group">
                                                 <label>Email<span style="color:red;">*</span></label>
-                                                <input type="email" required class="form-control form-control-solid"
-                                                    name="email" placeholder="Email" />
+                                                <input type="email" value="{{broker.user.email}}" required class="form-control form-control-solid" name="email" placeholder="Email" />
                                             </div>
                                             <!--end::Input-->
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-6">
                                             <!--begin::Input-->
                                             <div class="form-group">
                                                 <label>Username<span style="color:red;">*</span></label>
-                                                <input type="text" required class="form-control form-control-solid"
-                                                    name="username" placeholder="Username" />
-                                            </div>
-                                            <!--end::Input-->
-                                        </div>
-                                        <div class="col-md-3">
-                                            <!--begin::Input-->
-                                            <div class="form-group">
-                                                <label>Password<span style="color:red;">*</span></label>
-                                                <input type="password" required class="form-control form-control-solid"
-                                                    name="password" placeholder="Contact Number" />
-                                            </div>
-                                            <!--end::Input-->
-                                        </div>
-                                        <div class="col-md-3">
-                                            <!--begin::Input-->
-                                            <div class="form-group">
-                                                <label>Confirm Password<span style="color:red;">*</span></label>
-                                                <input type="password" required class="form-control form-control-solid"
-                                                    name="confirm_password" placeholder="Confirm Password" />
+                                                <input type="text" required class="form-control form-control-solid" value="{{broker.user.username}}" name="username" placeholder="Username" />
                                             </div>
                                             <!--end::Input-->
                                         </div>
@@ -154,7 +125,7 @@
                                             <div class="form-group">
                                                 <label>Country</label>
                                                 <input type="text" required class="form-control form-control-solid"
-                                                    name="country" placeholder="Country" value="" />
+                                                    name="country" value="{{broker.country}}" placeholder="Country" />
                                             </div>
                                             <!--end::Input-->
                                         </div>
@@ -162,76 +133,79 @@
                                             <div class="form-group">
                                                 <label>City</label>
                                                 <input type="text" required class="form-control form-control-solid"
-                                                    name="city" placeholder="City" value="" />
+                                                    name="city" value="{{broker.city}}" placeholder="City"  />
                                             </div>
                                             <!--end::Input-->
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>State<span style="color:red;">*</span></label>
+                                            <input type="text" required class="form-control form-control-solid" name="state" placeholder="State"
+                                                value="{{broker.state}}"  />
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>State<span style="color:red;">*</span></label>
-                                                <input type="text" required class="form-control form-control-solid"
-                                                    name="state" placeholder="State" value="" />
-                                            </div>
-                                            <!--end::Input-->
+                                        <!--end::Input-->
+                                    </div>
+                                    <div class="col-md-3">
+                                        <!--begin::Input-->
+                                        <div class="form-group">
+                                            <label>Address</label>
+                                            <input type="text" class="form-control form-control-solid" name="address" placeholder="Address" value="{{broker.address}}" />
                                         </div>
-                                        <div class="col-md-3">
-                                            <!--begin::Input-->
-                                            <div class="form-group">
-                                                <label>Address</label>
-                                                <input type="text" class="form-control form-control-solid"
-                                                    name="address" placeholder="Address" value="" />
-                                            </div>
-                                            <!--end::Input-->
-                                        </div>
+                                        <!--end::Input-->
+                                    </div>
                                     </div>
                                     <div class="row">
-
+                            
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Lease Start Date<span style="color:red;">*</span></label>
-                                                <input type="date" class="form-control " required
-                                                    name="lease_start_date" value="" placeholder="LSD">
+                                                <input type="date" class="form-control " required name="lease_start_date" value="{{broker.lease_start_date|date:'Y-m-d'}}" placeholder="LSD">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Lease End Date<span style="color:red;">*</span></label>
-                                                <input type="date" class="form-control " required name="lease_end_date"
-                                                    value="" placeholder="LED">
+                                                <input type="date" class="form-control " required name="lease_end_date" value="{{broker.lease_end_date|date:'Y-m-d'}}" placeholder="LED">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Rent Amount<span style="color:red;">*</span></label>
-                                                <input type="number" required class="form-control form-control-solid"
-                                                    name="rent_amount" value="" placeholder="Rent Amount">
+                                                <input type="number" required class="form-control form-control-solid"  name="rent_amount" value="{{broker.rent_amount}}"
+                                                    placeholder="Rent Amount">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Security Deposit<span style="color:red;">*</span></label>
-                                                <input type="number" required class="form-control form-control-solid"
-                                                    name="security_deposit" value="" placeholder="Security Deposit">
+                                                <input type="number" required class="form-control form-control-solid" name="security_deposit" value="{{broker.security_deposit}}"
+                                                    placeholder="Security Deposit">
                                             </div>
                                         </div>
                                     </div>
-
+                            
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Annual Income</label>
-                                                <input type="number" class="form-control form-control-solid"
-                                                    name="annual_income" value="" placeholder="Annual Income">
+                                                <input type="number" class="form-control form-control-solid" name="annual_income" value="{{broker.annual_income}}"
+                                                    placeholder="Annual Income">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
+                                                {% if broker.logo %}
+                                                <a href="">{{broker.logo.name}}</a>
+                                                {% endif %} <br>
                                                 <label class="mr-4">Picture</label>
                                                 <input type="file" class="mt-" name="logo" value="">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
+                                                {% if broker.agreement_document %}
+                                                <a href="">{{broker.agreement_document.file.name}}</a>
+                                                {% endif %} <br>
                                                 <label class="mr-4">Document</label>
                                                 <input type="file" class="" name="agreement_document" value="">
                                             </div>
@@ -239,73 +213,90 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label class="mr-4">Is Verified</label>
-                                                <input type="checkbox" class="mt-5" name="is_verified" value="">
+                                                <input type="checkbox" class="mt-5" name="is_verified" {% if broker.is_verified %}checked{% endif %}>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Payment History</label>
-                                                <textarea type="text-area" class="form-control" name="payment_history"
-                                                    value="" rows="3"></textarea>
-                                            </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Payment History</label>
+                                            <textarea type="text-area" class="form-control" name="payment_history" rows="3">{{broker.payment_history}}</textarea>
                                         </div>
+                                    </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Notes</label>
-                                                <textarea type="text-area" class="form-control" name="notes" value=""
-                                                    rows="3"></textarea>
+                                            <textarea type="text-area" class="form-control" name="notes"
+                                                rows="3">{{broker.notes}}</textarea>
                                             </div>
                                         </div>
                                     </div>
-                                    <h3>Images Upload</h3>
+
+                                    <div class="container">
+                                        <div class="row">
+                                    
+                                            {% if broker.images.all %}
+                                            {% for image in broker.images.all %}
+                                            <div class="col-lg-3">
+                                                <div class="card text-center">
+                                                    <img src="{{ image.image.url }}" class="img-fluid" alt="Waterfall" >
+                                                    <input type="checkbox" name="remove_images" value="{{ image.id }}"> Remove
+                                                    <div class="card-body">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                            {% else %}
+                                            <p>No images available for this broker.</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
 
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label for="imageUpload">Upload Images</label>
-                                                <input type="file" class="form-control-file" id="imageUpload" name="images"
-                                                    accept="image/jpeg, image/png, image/gif, image/bmp" multiple>
-                                                <div class="col-md-12">
-                                                    <div id="imagePreview" class="c mt-3 d-flex    "></div> <!-- Container for image previews -->
-                                                </div>
+                                           <div class="form-group">
+                                            <label for="imageUpload">Upload Images</label>
+                                            <input type="file" class="form-control-file" id="imageUpload" name="images"
+                                                accept="image/jpeg, image/png, image/gif, image/bmp" multiple>
+                                            <div class="col-md-12">
+                                                <div id="imagePreview" class="c mt-3 d-flex    "></div> <!-- Container for image previews -->
                                             </div>
-                                            <script>
-                                                document.getElementById('imageUpload').onchange = function (event) {
-                                                    var output = document.getElementById('imagePreview');
-                                                    output.innerHTML = '';
-                                                    for (var i = 0; i < event.target.files.length; i++) {
-                                                        var file = event.target.files[i];
-                                                        var reader = new FileReader();
-                                                        reader.onload = function (e) {
-                                                            var img = document.createElement('img');
-                                                            img.src = e.target.result;
-                                                            img.className = 'img-thumbnail';
-                                                            var col = document.createElement('div');
-                                                            col.className = 'col-md-12 mb-3 ';
-                                                            col.appendChild(img);
-                                                            output.appendChild(col);
-                                                        }
-                                                        reader.readAsDataURL(file);
+                                        </div>
+                                        <script>
+                                            document.getElementById('imageUpload').onchange = function (event) {
+                                                var output = document.getElementById('imagePreview');
+                                                output.innerHTML = '';
+                                                for (var i = 0; i < event.target.files.length; i++) {
+                                                    var file = event.target.files[i];
+                                                    var reader = new FileReader();
+                                                    reader.onload = function (e) {
+                                                        var img = document.createElement('img');
+                                                        img.src = e.target.result;
+                                                        img.className = 'img-thumbnail';
+                                                        var col = document.createElement('div');
+                                                        col.className = 'col-md-12 mb-3 ';
+                                                        col.appendChild(img);
+                                                        output.appendChild(col);
                                                     }
-                                                };
-                                            </script>
+                                                    reader.readAsDataURL(file);
+                                                }
+                                            };
+                                        </script>
                                                 <ul id="imageUploads"></ul>
                                             </div>
                                         </div>
                                     </div>
-
-
-
+                            
+                            
+                            
                                 </div>
                                 <!--end: Wizard Step 1-->
                                 <!--begin: Wizard Actions-->
                                 <div class="d-flex float-right">
                                     <div>
-                                        <button type="submit"
-                                            class="btn btn-success font-weight-bolder text-uppercase">Submit</button>
+                                        <button type="submit" class="btn btn-success font-weight-bolder text-uppercase">Submit</button>
                                     </div>
                                 </div>
                                 <!--end: Wizard Actions-->
@@ -313,8 +304,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </div></div>
 
 </div>
 </section>
