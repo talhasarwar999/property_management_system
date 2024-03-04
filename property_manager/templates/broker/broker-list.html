@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">brokers</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="{% url 'property-manager-dashboard' %}">Home</a></li>
+            <li class="breadcrumb-item active">broker</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+  {% if messages %}
+  <div id="notification-container">
+    {% for message in messages %}
+    <div class="notification {% if message.tags == 'success' %}success{% elif message.tags == 'error' %}error{% endif %}">
+      <span class="notification-icon">
+        {% if message.tags == 'success' %}
+        <i class="fas fa-check-circle"></i> <!-- Use an appropriate icon for success -->
+        {% elif message.tags == 'error' %}
+        <i class="fas fa-times-circle"></i> <!-- Use an appropriate icon for error -->
+        {% endif %}
+      </span>
+      <span class="notification-text">{{ message|escapejs|safe }}</span>
+      <!-- <span class="notification-close" onclick="removeNotification(this)">×</span> -->
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <script>
+    // Function to remove the notification element
+    //function removeNotification(element) {
+    //	element.parentElement.style.display = 'none';
+    //}
+
+    // Automatically remove notifications after 3 seconds
+    setTimeout(function () {
+      var notifications = document.querySelectorAll('.notification');
+      notifications.forEach(function (notification) {
+        notification.style.display = 'none';
+      });
+    }, 4000);
+  </script>
+<section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;width: 100%;">
+                  <h3 class="card-title" style="margin: 0;"> 
+                    broker List
+                  </h3>
+                 <a href="{% url 'create-broker' %}" class="btn btn-primary" style="margin-left: auto;">Create broker</a>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                  <table id="example2" class="table table-bordered table-hover">
+                    <thead>
+                      <tr>
+                          <th>Name</th>
+                          <th>Property</th>
+                          <th>Contact</th>
+                          <th>Address</th>
+                          <th>Lease Start Date</th>
+                          <th>Rent Amount</th>
+                          <th>City</th>
+                          <th>Actions</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    {% for broker in brokers %}
+                    <tr>
+                        <td>{{ broker.name }}</td>
+                        <td>{{ broker.property.title }}</td>
+                        <td>{{ broker.contact_number }}</td>
+                        <td>{{ broker.address }}</td>
+                        <td>{{ broker.lease_start_date }}</td>
+                        <td>{{ broker.rent_amount }}</td>
+                        <td>{{ broker.city }}</td>
+                        <td>
+                            <a href="{% url 'view-broker' broker.id %}"><span class="fas fa-eye text-primary"></span></a>
+                            <a href="{% url 'edit-broker' broker.id %}"><span class="fas fa-edit text-success"></span></a>
+                            <a href="{% url 'delete-broker' broker.id %}"><span class="fas fa-trash text-danger"></span></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                   <tfoot>
+                    <tr>
+                      <th>Name</th>
+                      <th>Property</th>
+                      <th>Contact</th>
+                      <th>Address</th>
+                      <th>Lease Start Date</th>
+                      <th>Rent Amount</th>
+                      <th>City</th>
+                      <th>Actions</th>
+                    </tr>
+                    </tfoot>
+                  </table>
+
+                  <div class="row d-flex justify-content-center border-top pt-5">
+                    <!--Pagination-->
+                    <nav aria-label="Page navigation example">
+                      <ul class="pagination justify-content-center">
+                        {% if brokers.has_previous %}
+                        <li class="page-item">
+                          <a class="page-link" href="?page={{ brokers.previous_page_number }}&{{filter_params}}">Previous</a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                          <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                        </li>
+                        {% endif %}
+                  
+                        {% if brokers.number|add:'-4' > 1 %}
+                        <li class="page-item"><a class="page-link"
+                            href="?page={{ brokers.number|add:'-5' }}&{{filter_params}}">&hellip;</a></li>
+                        {% endif %}
+                  
+                        {% for i in brokers.paginator.page_range %}
+                        {% if brokers.number == i %}
+                        <li class="page-item active" aria-current="page">
+                          <span class="page-link">
+                            {{ i }}
+                            <span class="sr-only">(current)</span>
+                          </span>
+                        </li>
+                        {% elif i > brokers.number|add:'-5' and i < brokers.number|add:'5' %} <li class="page-item"><a
+                            class="page-link" href="?page={{ i }}&{{filter_params}}">{{ i }}</a></li>
+                          {% endif %}
+                          {% endfor %}
+                  
+                          {% if brokers.paginator.num_pages > brokers.number|add:'4' %}
+                          <li class="page-item"><a class="page-link"
+                              href="?page={{ brokers.number|add:'5' }}&{{filter_params}}">&hellip;</a></li>
+                          {% endif %}
+                  
+                          {% if brokers.has_next %}
+                          <li class="page-item">
+                            <a class="page-link" href="?page={{ brokers.next_page_number }}&{{filter_params}}">Next</a>
+                          </li>
+                          {% else %}
+                          <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
+                          </li>
+                          {% endif %}
+                      </ul>
+                    </nav>
+                    <!--end of Pagination-->
+                  </div>
+                </div>
+                <!-- /.card-body -->
+              </div>
+        </div>
+    </div>
+</div>
+<section>
+</div>
+{% endblock  %}
+
+ 
