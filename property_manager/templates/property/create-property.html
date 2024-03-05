@@ -167,8 +167,8 @@
                                         <div class="col-md-3">
                                             <!--begin::Input-->
                                             <div class="form-group">
-                                                <label>Total Area</label>
-                                                <input type="number" required class="form-control form-control-solid" name="total_area"
+                                                <label req>Total Area <span style="color:red;">*</span></label>
+                                                <input  type="number" required class="form-control form-control-solid" name="total_area"
                                                     placeholder="Total Area" value="" />
                                             </div>
                                             <!--end::Input-->
@@ -302,22 +302,21 @@
                                     };
                                 </script>
                                                 <ul id="fileUploads"></ul>
+                                                <div class="d-flex float-right">
+                                                    <div>
+                                                        <button type="submit" class="btn btn-success font-weight-bolder text-uppercase">Submit</button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
+                                      
                                     </div>
-                            
-                            
-                            
                                 </div>
                                 <!--end: Wizard Step 1-->
                                 <!--begin: Wizard Actions-->
-                                <div class="d-flex float-right">
-                                    <div>
-                                        <button type="submit" class="btn btn-success font-weight-bolder text-uppercase">Submit</button>
-                                    </div>
-                                </div>
                                 <!--end: Wizard Actions-->
                             </form>
+                            
                         </div>
                     </div>
                 </div>
