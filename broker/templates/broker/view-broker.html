@@ -209,7 +209,7 @@
             
                     {% if broker.files.all %}
                     {% for image in broker.files.all %}
-                    {% if image.type == 'image' %}
+                    {% if image.type == 'image' and image.file.url %}
                     <div class="col-lg-3">
                         <div class="card text-center">
                             <img src="{{ image.file.url }}" class="card-img-top" alt="Waterfall" style="height: 250px;">
@@ -229,7 +229,7 @@
                 <div class="row">
                     {% if broker.files.all %}
                     {% for document in broker.files.all %}
-                    {% if document.type == 'document' %}
+                    {% if document.type == 'document' and image.file.url %}
                     <div class="col-lg-3">
                         <div class="card text-center">
                             <a href="{{ document.file.url }}" class="mt-4" download>{{ document.file.name }}</a>

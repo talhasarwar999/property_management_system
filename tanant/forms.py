@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django import forms
 from .models import Tanant
+from django.contrib.auth.forms import UserChangeForm
 User = get_user_model()
 
 class TanantForm(forms.ModelForm):
@@ -21,3 +22,15 @@ class TanantForm(forms.ModelForm):
         if instance and instance.pk:
             self.fields['password'].required = False
             self.fields['confirm_password'].required = False
+
+
+class TenantProfileUpdateForm(UserChangeForm):
+    contact_number = forms.IntegerField(required=True)
+    city = forms.CharField(max_length=255, required=False)
+    country = forms.CharField(max_length=255, required=False)
+    address = forms.CharField(max_length=255, required=False)
+    logo = forms.ImageField(required=False)
+
+    class Meta:
+        model = User
+        fields = ('country', 'contact_number', 'city', 'address','username', 'email', 'logo',)

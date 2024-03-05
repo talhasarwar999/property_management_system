@@ -5,6 +5,8 @@ urlpatterns = [
 
     # Broker Dashboard urls
     path("broker-dashboard/", views.broker_dashboard, name="broker-dashboard"),
+
+    # Broker Profile urls
     path("broker-profile/", views.broker_profile, name="broker-profile"),
     path("change-broker-password/", views.change_broker_password, name="change-broker-password"),
 

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .decorators import property_dealer_required, broker_or_property_dealer_required
-from .models import PropertyDealer, Property, Image, Document, PropertyFile
+from .models import PropertyDealer, Property, PropertyFile
 from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -100,7 +100,6 @@ def change_password(request):
 
 
 @login_required(login_url="signin")
-@broker_or_property_dealer_required
 def property_list(request):
     """
     Displays a list of properties.
@@ -111,7 +110,12 @@ def property_list(request):
     page_number = request.GET.get("page")
     properties = paginator.get_page(page_number)
 
-    if request.user.is_broker:
+    if request.user.is_tenant:
+        properties = Property.objects.filter(tanant__user=request.user)
+
+    if request.user.is_tenant:
+        base_template = 'tenant-base.html'
+    elif request.user.is_broker:
         base_template = 'broker-base.html'
     else:
         base_template = 'base.html'
@@ -146,19 +150,24 @@ def delete_property(request, pk):
 
 
 @login_required(login_url="signin")
-@broker_or_property_dealer_required
 def view_property(request, pk):
     """
     Displays details of a specific property.
     """
 
     try:
-        property = Property.objects.get(id=pk)
+        if request.user.is_tenant:
+            tenant = Tanant.objects.get(user=request.user)
+            property = Property.objects.get(id=pk, tanant=tenant)
+        else:
+            property = Property.objects.get(id=pk)
     except:
         messages.error(request, "Property ID does not exist")
         return redirect("property-list")
 
-    if request.user.is_broker:
+    if request.user.is_tenant:
+        base_template = 'tenant-base.html'
+    elif request.user.is_broker:
         base_template = 'broker-base.html'
     else:
         base_template = 'base.html'

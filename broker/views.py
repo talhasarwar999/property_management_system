@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from property_manager.decorators import property_dealer_required, broker_required
-from property_manager.models import PropertyDealer, Property, Image, Document
+from property_manager.decorators import property_dealer_required, broker_required, tenant_or_property_dealer_required
+from property_manager.models import PropertyDealer, Property
 from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -13,7 +13,7 @@ from django.core.paginator import Paginator
 User = get_user_model()
 
 
-# ================ Tenant Dashboard Views Start =================
+# ================ Broker Dashboard Views Start =================
 
 @login_required(login_url="signin")
 @broker_required
@@ -32,13 +32,12 @@ def broker_dashboard(request):
         "free_properties": free_properties,
         "off_plan_properties": off_plan_properties
     }
-    return render(request, "broker-dashboard.html", context)
+    return render(request, "tenant-dashboard.html", context)
 
-# ================ Tenant Dashboard Views End =================
+# ================ Broker Dashboard Views End =================
 
 
-# ================ Property Manager Profile Views Start =================
-
+# ================ Broker Profile Views Start =================
 
 @login_required(login_url="signin")
 @broker_required
@@ -56,7 +55,7 @@ def broker_profile(request):
             broker.company_name = form.cleaned_data["company_name"]
             broker.contact_number = form.cleaned_data["contact_number"]
             broker.address = form.cleaned_data["address"]
-            broker.website = form.cleaned_data["city"]
+            broker.city = form.cleaned_data["city"]
             if 'logo' in form.cleaned_data and form.cleaned_data['logo'] is not None:
                 broker.logo = form.cleaned_data["logo"]
             broker.save()
@@ -70,7 +69,7 @@ def broker_profile(request):
     context = {
         "broker": broker
     }
-    return render(request, "broker-profile.html", context)
+    return render(request, "tenant-profile.html", context)
 
 @login_required(login_url="signin")
 @broker_required
@@ -90,20 +89,28 @@ def change_broker_password(request):
                 for error in errors:
                     messages.error(request, f"{field.capitalize()}: {error}")
             return redirect("broker-profile")
-    return render(request, "broker-profile.html")
+    return render(request, "tenant-profile.html")
 
 
 # ================ Broker Profile Views End =================
 
 
+# ================ Broker Views Start =================
+
 @login_required(login_url="signin")
-@property_dealer_required
+@tenant_or_property_dealer_required
 def broker_list(request):
     """
     Displays a list of brokers.
     """
 
-    brokers = Broker.objects.filter(user__is_broker=True).order_by('-created_date')
+    brokers = Broker.objects.none()
+    if request.user.is_tenant:
+        tenant = Tanant.objects.select_related('broker').filter(user=request.user).first()
+        if tenant and tenant.broker:
+            brokers = Broker.objects.filter(pk=tenant.broker.pk)
+    if request.user.is_property_dealer:
+        brokers = Broker.objects.filter(user__is_broker=True, user__is_active=True).order_by('-created_date')
     paginator = Paginator(brokers, 7)
     page_number = request.GET.get("page")
     brokers = paginator.get_page(page_number)
@@ -179,16 +186,18 @@ def delete_broker(request, pk):
 
     try:
         broker = Broker.objects.get(id=pk)
+        user = User.objects.get(username=broker.user.username, is_broker=True)
     except:
         messages.error(request, "Broker ID does not exist")
         return redirect("broker-list")
     if request.method == "POST":
-        broker.delete()
+        user.is_active = False
+        user.save()
         messages.success(request, "Broker deleted successfully")
         return redirect("broker-list")
 
     context = {
-        'broker': broker
+        'broker': broker,
     }
     return render(request, "broker/delete-broker.html", context)
 
@@ -201,7 +210,11 @@ def view_broker(request, pk):
     """
 
     try:
-        broker = Broker.objects.get(id=pk)
+        if request.user.is_tenant:
+            tenant = Tanant.objects.get(user=request.user)
+            broker = Broker.objects.get(id=pk, tanant=tenant)
+        else:
+            broker = Broker.objects.get(id=pk)
     except:
         messages.error(request, "Broker ID does not exist")
         return redirect("broker-list")
@@ -283,3 +296,5 @@ def edit_broker(request, pk):
         'broker': broker,
     }
     return render(request, "broker/edit-broker.html", context)
+
+# ================ Broker Views End =================

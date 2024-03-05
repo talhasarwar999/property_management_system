@@ -17,20 +17,6 @@ class PropertyDealer(models.Model):
         return self.company_name
 
 
-class Image(models.Model):
-    image = models.ImageField(upload_to='images/')
-    description = models.TextField(blank=True, null=True)
-
-    def __str__(self):
-        return self.description or "Image"
-
-class Document(models.Model):
-    file = models.FileField(upload_to='documents/')
-    description = models.TextField(blank=True, null=True)
-
-    def __str__(self):
-        return self.description or "Document"
-
 
 class PropertyFile(models.Model):
     file = models.FileField(upload_to='property_documents/')
@@ -76,8 +62,6 @@ class RentalAgreement(models.Model):
     lease_end_date = models.DateTimeField()
     monthly_rent_tenant = models.FloatField(null=True, blank=True)
     broker_commission = models.FloatField(null=True, blank=True)
-    agreement_document = models.ManyToManyField(Document)
-    images = models.ManyToManyField(Image)
     security_deposit = models.FloatField(null=True, blank=True)
     late_payment_fee = models.FloatField(null=True, blank=True)
     maintenance_responsibilities = models.TextField(blank=True, null=True)
@@ -105,7 +89,6 @@ class Invoice(models.Model):
     amount_due = models.DecimalField(max_digits=10, decimal_places=2)
     due_date = models.DateTimeField()
     status = models.CharField(max_length=50, choices=[('unpaid', 'Unpaid'), ('paid', 'Paid')])
-    invoice_pdf = models.OneToOneField(Document, on_delete=models.CASCADE, null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

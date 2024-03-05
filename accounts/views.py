@@ -27,8 +27,10 @@ def signin(request):
             )
             if user.is_broker:
                 return redirect("broker-dashboard")
-            if user.is_property_dealer:
+            elif user.is_property_dealer:
                 return redirect("property-manager-dashboard")
+            elif user.is_tenant:
+                return redirect("tenant-dashboard")
         else:
             messages.error(request, "Invalid username or password.")
             return redirect("signin")

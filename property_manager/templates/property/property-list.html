@@ -57,7 +57,9 @@
                   <h3 class="card-title" style="margin: 0;"> 
                     Property List
                   </h3>
+                  {% if request.user.is_property_dealer %}
                  <a href="{% url 'create-property' %}" class="btn btn-primary" style="margin-left: auto;">Create Property</a>
+                 {% endif %}
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">

@@ -57,7 +57,9 @@
                   <h3 class="card-title" style="margin: 0;"> 
                     Tenant List
                   </h3>
+                  {% if request.user.is_broker or request.user.is_property_dealer %}
                  <a href="{% url 'create-tenant' %}" class="btn btn-primary" style="margin-left: auto;">Create Tenant</a>
+                 {% endif %}
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
@@ -86,8 +88,10 @@
                         <td>{{ tenant.city }}</td>
                         <td>
                             <a href="{% url 'view-tenant' tenant.id %}"><span class="fas fa-eye text-primary"></span></a>
+                            {% if request.user.is_broker or request.user.is_property_dealer %}
                             <a href="{% url 'edit-tenant' tenant.id %}"><span class="fas fa-edit text-success"></span></a>
                             <a href="{% url 'delete-tenant' tenant.id %}"><span class="fas fa-trash text-danger"></span></a>
+                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %}

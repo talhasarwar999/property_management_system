@@ -8,7 +8,7 @@ class TanantFile(models.Model):
     description = models.TextField(blank=True, null=True)
     type = models.CharField(max_length=255, choices=[('profile', 'Profile'), ('document', 'Document'), ('image', 'Image')])
 
-# Create your models here.
+
 class Tanant(models.Model):
     STATUS_CHOICES = [
         ('ON_RENT', 'On Rent'),

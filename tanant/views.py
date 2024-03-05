@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from property_manager.decorators import property_dealer_required, broker_or_property_dealer_required
-from property_manager.models import PropertyDealer, Property, Image, Document
+from property_manager.decorators import tenant_required, property_dealer_required, broker_or_property_dealer_required, broker_required
+from property_manager.models import PropertyDealer, Property
 from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -8,10 +8,85 @@ from .forms import TanantForm
 from .models import Tanant, TanantFile
 from broker.models import Broker
 from django.core.paginator import Paginator
-from django.core.files.images import get_image_dimensions
+from property_manager.forms import CustomPasswordChangeForm
+from.forms import TenantProfileUpdateForm
 User = get_user_model()
 
-# Create your views here.
+
+
+# ================ Tenant Dashboard Views Start =================
+
+@login_required(login_url="signin")
+@tenant_required
+def tenant_dashboard(request):
+    """
+    Dashboard for Broker.
+    """
+
+    return render(request, "tenant-dashboard.html")
+
+# ================ Tenant Dashboard Views End =================
+
+
+# ================ Tenant Profile Views End =================
+
+@login_required(login_url="signin")
+@tenant_required
+def tenant_profile(request):
+    """
+    Tenant Profile.
+    """
+
+    tenant = Tanant.objects.filter(user=request.user, user__is_tenant=True).first()
+    if request.method == "POST":
+        form = TenantProfileUpdateForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            user = form.save()
+            tenant = Tanant.objects.filter(user=user, user__is_tenant=True).first()
+            tenant.country = form.cleaned_data["country"]
+            tenant.contact_number = form.cleaned_data["contact_number"]
+            tenant.address = form.cleaned_data["address"]
+            tenant.city = form.cleaned_data["city"]
+            if 'logo' in form.cleaned_data and form.cleaned_data['logo'] is not None:
+                tenant.logo = form.cleaned_data["logo"]
+            tenant.save()
+            messages.success(request, "Profile updated successfully")
+            return redirect("tenant-profile")
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field.capitalize()}: {error}")
+            return redirect("tenant-profile")
+    context = {
+        "tenant": tenant
+    }
+    return render(request, "tenant-profile.html", context)
+
+@login_required(login_url="signin")
+@tenant_required
+def change_tenant_password(request):
+    """
+    Process the password change for a user and provide feedback.
+    """
+
+    if request.method == "POST":
+        form = CustomPasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Password updated successfully")
+            return redirect("tenant-profile")
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field.capitalize()}: {error}")
+            return redirect("tenant-profile")
+    return render(request, "tenant-profile.html")
+
+
+# ================ Tenant Profile Views End =================
+
+
+# ================ Tenant Views Start =================
 
 
 @login_required(login_url="signin")
@@ -22,9 +97,9 @@ def tenant_list(request):
     """
 
     if request.user.is_broker:
-        tenants = Tanant.objects.filter(broker__user=request.user,user__is_tenant=True).order_by('-created_date')
+        tenants = Tanant.objects.filter(broker__user=request.user,user__is_tenant=True, user__is_active=True).order_by('-created_date')
     if request.user.is_property_dealer:
-        tenants = Tanant.objects.filter(user__is_tenant=True).order_by('-created_date')
+        tenants = Tanant.objects.filter(user__is_tenant=True, user__is_active=True).order_by('-created_date')
     paginator = Paginator(tenants, 7)
     page_number = request.GET.get("page")
     tenants = paginator.get_page(page_number)
@@ -46,7 +121,7 @@ def broker_tenant_list(request):
     Displays a list of tenants.
     """
 
-    tenants = Tanant.objects.filter(user__is_tenant=True, broker__isnull=False).order_by('-created_date')
+    tenants = Tanant.objects.filter(user__is_tenant=True, broker__isnull=False, user__is_active=True).order_by('-created_date')
     paginator = Paginator(tenants, 7)
     page_number = request.GET.get("page")
     tenants = paginator.get_page(page_number)
@@ -117,7 +192,7 @@ def create_tenant(request):
                     return redirect("create-tenant")
     properties = Property.objects.all()
     if request.user.is_broker:
-        base_template = 'broker-base.html'
+        base_template = 'tenant-base.html'
     else:
         base_template = 'base.html'
     context = {
@@ -136,15 +211,17 @@ def delete_tenant(request, pk):
 
     try:
         tenant = Tanant.objects.get(id=pk)
+        user = User.objects.get(username=tenant.user.username, is_tenant=True)
     except:
         messages.error(request, "Tenant ID does not exist")
         return redirect("tenant-list")
     if request.method == "POST":
-        tenant.delete()
+        user.is_active = False
+        user.save()
         messages.success(request, "Tenant deleted successfully")
         return redirect("tenant-list")
     if request.user.is_broker:
-        base_template = 'broker-base.html'
+        base_template = 'tenant-base.html'
     else:
         base_template = 'base.html'
 
@@ -255,7 +332,7 @@ def edit_tenant(request, pk):
                     messages.error(request, f"{field}, {error}")
 
     if request.user.is_broker:
-        base_template = 'broker-base.html'
+        base_template = 'tenant-base.html'
     else:
         base_template = 'base.html'
 
@@ -265,3 +342,6 @@ def edit_tenant(request, pk):
         'base_template': base_template
     }
     return render(request, "tenant/edit-tenant.html", context)
+
+
+# ================ Tenant Views End =================

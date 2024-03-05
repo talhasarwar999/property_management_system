@@ -1,0 +1,239 @@
+
+{% extends "tenant-base.html" %}
+{% block title %}Table{% endblock %}
+{% block content %}
+{% load static %}
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Tenant Profile</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="{% url 'tenant-dashboard' %}">Home</a></li>
+              <li class="breadcrumb-item active">Profile</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+{% if messages %}
+<div id="notification-container">
+  {% for message in messages %}
+  <div class="notification {% if message.tags == 'success' %}success{% elif message.tags == 'error' %}error{% endif %}">
+    <span class="notification-icon">
+      {% if message.tags == 'success' %}
+      <i class="fas fa-check-circle"></i> <!-- Use an appropriate icon for success -->
+      {% elif message.tags == 'error' %}
+      <i class="fas fa-times-circle"></i> <!-- Use an appropriate icon for error -->
+      {% endif %}
+    </span>
+    <span class="notification-text">{{ message|escapejs|safe }}</span>
+    <!-- <span class="notification-close" onclick="removeNotification(this)">×</span> -->
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+<script>
+  // Function to remove the notification element
+  //function removeNotification(element) {
+  //	element.parentElement.style.display = 'none';
+  //}
+
+  // Automatically remove notifications after 3 seconds
+  setTimeout(function () {
+    var notifications = document.querySelectorAll('.notification');
+    notifications.forEach(function (notification) {
+      notification.style.display = 'none';
+    });
+  }, 4000);
+</script>
+    <!-- Main content -->
+  <section style="background-color: #eee;">
+    <div class="container py-1">
+  
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="card">
+            <div class="card-body text-center">
+                {% if request.user.is_authenticated %}
+                {% if tenant.logo %}
+                <img src="{{ tenant.logo.url }}" class="rounded-circle img-fluid" style="width: 150px;">
+                {% else %}
+                <img src="{% static 'img/static-property-manager-image.jpeg' %}" class="rounded-circle img-fluid" style="width: 150px;">
+                {% endif %}
+                
+                {% else %}
+                <img src="{% static 'img/static-property-manager-image.jpeg' %}" class="rounded-circle img-fluid" style="width: 150px;">
+                {% endif %}
+              <h5 class="my-2">{{tenant.user.username}}</h5>
+              <p class="text-muted mb-1">{{tenant.user.email}}</p>
+              <p class="text-muted">{{tenant.address}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-8">
+          <div class="card mb-4">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">UserName</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{tenant.user.username}}</p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Email</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{tenant.user.email}}</p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Phone</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{tenant.contact_number}}</p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Address</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{tenant.address}}</p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">City</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{tenant.city}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+      <div class="row">
+      <div class="col-lg-6">
+          <h4 class="mb-3">Update Profile</h4>
+        <div class="card">
+          <div class="card-body text-center">
+            <form action="{% url 'tenant-profile' %}" method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+            <div class="form-group row mb-3">
+              <label for="username" class="col-sm-3 col-form-label text-right">Username:</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="username" name="username" value="{{tenant.user.username}}" required>
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <label for="email" class="col-sm-3 col-form-label text-right">Email:</label>
+              <div class="col-sm-9">
+                <input type="email" class="form-control" id="email" name="email" value="{{tenant.user.email}}" required>
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <label for="number" class="col-sm-3 col-form-label text-right">Contact:</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="email" name="contact_number" placeholder="Contact Number" value="{{tenant.contact_number}}" required>
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <label for="email" class="col-sm-3 col-form-label text-right">Address:</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="email" name="address" placeholder="Address"
+                  value="{{tenant.address}}" required>
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <label for="email" class="col-sm-3 col-form-label text-right">City:</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="email" name="city" placeholder="City"
+                  value="{{tenant.city}}" required>
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <label for="email" class="col-sm-3 col-form-label text-right">Country:</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="email" name="country" placeholder="Website" value="{{tenant.country}}"
+                  required>
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <label for="email" class="col-sm-3 col-form-label text-right">Picture:</label>
+              <div class="col-sm-9">
+                <input type="file" class="form-control" id="email" name="logo">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 offset-md-8"> <!-- Offset to align button with the input fields -->
+                <div class="d-flex justify-content-end">
+                  <button type="submit" class="btn btn-primary btn-block">Update Profile</button>
+                </div>
+              </div>
+            </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+        <div class="col-lg-6">
+            <h4 class="mb-3">Update Password</h4>
+          <div class="card">
+            <div class="card-body text-center">
+              <form action="{% url 'change-tenant-password' %}" method="POST">
+                {% csrf_token %}
+              <div class="form-group row mb-3">
+                <label for="email" class="col-sm-3 col-form-label text-right">Old Password:</label>
+                <div class="col-sm-9">
+                  <input type="password" class="form-control" id="email" name="old_password" placeholder="Old Password" required>
+                </div>
+              </div>
+              <div class="form-group row mb-3">
+                <label for="email" class="col-sm-3 col-form-label text-right">New Password:</label>
+                <div class="col-sm-9">
+                  <input type="password" class="form-control" id="email" name="new_password1" placeholder="New Password" required>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="email" class="col-sm-3 col-form-label text-right">Again Password:</label>
+                <div class="col-sm-9">
+                  <input type="password" class="form-control" id="email" name="new_password2" placeholder="Confirm Password" required>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4 offset-md-8"> <!-- Offset to align button with the input fields -->
+                  <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary btn-block">Update Password</button>
+                  </div>
+                </div>
+              </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        </div>
+      </div>
+  </section>
+    <!-- /.content -->
+  </div>
+{% endblock %}
+
+
