@@ -2,291 +2,401 @@
 {% block title %}Table{% endblock %}
 {% block content %}
 {% load static %}
+
+
+<!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <div class="content-header">
+    <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Property Details</h1>
-                </div><!-- /.col -->
+                    <h1>Profile</h1>
+                </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{% url 'property-manager-dashboard' %}">Home</a></li>
-                        <li class="breadcrumb-item active">Property</li>
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">User Profile</li>
                     </ol>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
-    {% if messages %}
-    <div id="notification-container">
-        {% for message in messages %}
-        <div
-            class="notification {% if message.tags == 'success' %}success{% elif message.tags == 'error' %}error{% endif %}">
-            <span class="notification-icon">
-                {% if message.tags == 'success' %}
-                <i class="fas fa-check-circle"></i> <!-- Use an appropriate icon for success -->
-                {% elif message.tags == 'error' %}
-                <i class="fas fa-times-circle"></i> <!-- Use an appropriate icon for error -->
-                {% endif %}
-            </span>
-            <span class="notification-text">{{ message|escapejs|safe }}</span>
-            <!-- <span class="notification-close" onclick="removeNotification(this)">×</span> -->
-        </div>
-        {% endfor %}
-    </div>
-    {% endif %}
-    <script>
-        // Function to remove the notification element
-        //function removeNotification(element) {
-        //	element.parentElement.style.display = 'none';
-        //}
-
-        // Automatically remove notifications after 3 seconds
-        setTimeout(function () {
-            var notifications = document.querySelectorAll('.notification');
-            notifications.forEach(function (notification) {
-                notification.style.display = 'none';
-            });
-        }, 4000);
-    </script>
-    <!-- Main content -->
-    <section style="background-color: #eee;">
-        <div class="container py-1">
-
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <p class="mb-0">Title</p>
-                                </div>
-                                <div class="col-sm-9">
-                                    <p class="text-muted mb-0">{{property.title|default:"---------"}}</p>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <p class="mb-0">Address</p>
-                                </div>
-                                <div class="col-sm-9">
-                                    <p class="text-muted mb-0">{{property.address}}</p>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <p class="mb-0">Property Type</p>
-                                </div>
-                                <div class="col-sm-9">
-                                    <p class="text-muted mb-0">{{property.property_type}}</p>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <p class="mb-0">Status</p>
-                                </div>
-                                <div class="col-sm-9">
-                                    <p class="text-muted mb-0">{{property.status}}</p>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <p class="mb-0">Location</p>
-                                </div>
-                                <div class="col-sm-9">
-                                    <p class="text-muted mb-0">{{property.location}}</p>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <p class="mb-0">Country</p>
-                                </div>
-                                <div class="col-sm-9">
-                                    <p class="text-muted mb-0">{{property.country}}</p>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <p class="mb-0">City</p>
-                                </div>
-                                <div class="col-sm-9">
-                                    <p class="text-muted mb-0">{{property.city}}</p>
-                                </div>
-                            </div>
-                            <hr>
-
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <p class="mb-0">State</p>
-                                </div>
-                                <div class="col-sm-9">
-                                    <p class="text-muted mb-0">{{property.state}}</p>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <p class="mb-0">EST Rent</p>
-                                </div>
-                                <div class="col-sm-9">
-                                    <p class="text-muted mb-0">{{property.est_rent}}</p>
-                                </div>
-                            </div>
-                            <hr>
-
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <p class="mb-0">Total Area</p>
-                                </div>
-                                <div class="col-sm-9">
-                                    <p class="text-muted mb-0">{{property.total_area}}</p>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <p class="mb-0">No. of Rooms</p>
-                                </div>
-                                <div class="col-sm-9">
-                                    <p class="text-muted mb-0">{{property.num_rooms}}</p>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <p class="mb-0">No.of Bathrooms</p>
-                                </div>
-                                <div class="col-sm-9">
-                                    <p class="text-muted mb-0">{{property.num_bathrooms}}</p>
-                                </div>
-                            </div>
-                            <hr>
-
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <p class="mb-0">ETA</p>
-                                </div>
-                                <div class="col-sm-9">
-                                    <p class="text-muted mb-0">{{property.est_delivery_time}}</p>
-                                </div>
-                            </div>
-                            <hr>
-
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <p class="mb-0">Construction Year</p>
-                                </div>
-                                <div class="col-sm-9">
-                                    <p class="text-muted mb-0">{{property.construction_year}}</p>
-                                </div>
-                            </div>
-                            <hr>
-
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <p class="mb-0">Has Swimming Pool</p>
-                                </div>
-                                <div class="col-sm-9">
-                                    <p class="text-muted mb-0">{{property.has_swimming_pool}}</p>
-                                </div>
-                            </div>
-                            <hr>
-
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <p class="mb-0">Has Garden</p>
-                                </div>
-                                <div class="col-sm-9">
-                                    <p class="text-muted mb-0">{{property.has_garden}}</p>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <p class="mb-0">Has Garage</p>
-                                </div>
-                                <div class="col-sm-9">
-                                    <p class="text-muted mb-0">{{property.has_garage}}</p>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <p class="mb-0">Listing Details</p>
-                                </div>
-                                <div class="col-sm-9">
-                                    <p class="text-muted mb-0">{{property.listing_details}}</p>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
                 </div>
-            </div></div>
-           
-            <div class="container">
-                <h4>Property Images</h4>
-            <div class="row">
-                
-                {% if property.images.all %}
-                {% for image in property.images.all %}
-                <div class="col-lg-3">
-                    <div class="card text-center">
-                        <img src="{{ image.image.url }}" class="card-img-top"
-                            alt="Waterfall"  style="height: 250px;">
-                        <div class="card-body">
-                            {% if image.description %}
-                            <p class="card-text">
-                              {{image.description}}
-                            </p>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-                {% else %}
-                <p>No images available for this property.</p>
-                {% endif %}
-    </div>
-        </div>
-
-
-        <div class="container">
-            <h4>Property Documents</h4>
-            <div class="row">
-        
-                {% if property.documents.all %}
-                {% for document in property.documents.all %}
-                <div class="col-lg-3">
-                    <div class="card text-center">
-                        <a href="{{ document.file.url }}" class="mt-4" download>{{ document.file.name }}</a>
-                        <hr>
-                        <div class="card-body">
-                            {% if document.description %}
-                            <p class="card-text mt-n3">
-                                {{document.description}}
-                            </p>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-                {% else %}
-                <p>No images available for this property.</p>
-                {% endif %}
             </div>
-        </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3">
+
+                    <!-- Profile Image -->
+                    <div class="card card-primary card-outline">
+                        <div class="card-body box-profile">
+                            <div class="text-center">
+                                {% if property.images.all %}
+                                <img class="profile-user-img img-fluid img-circle" src="{{ property.images.all.0.image.url }}" alt="Property Image">
+                                {% else %}
+                                <img class="profile-user-img img-fluid img-circle" src="../../dist/img/user4-128x128.jpg"
+                                    alt="User profile picture">
+                                {% endif %}
+                            </div>
+
+                            <h3 class="profile-username text-center">{{property.title|default:"---------"}}</h3>
+
+                            <p class="text-muted text-center">{{property.property_type}}</p>
+
+                            <ul class="list-group list-group-unbordered mb-3">
+                                <li class="list-group-item">
+                                    <b>Total Area(sqrft)</b> <a class="float-right">{{property.total_area}}</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Rooms</b> <a class="float-right">{{property.num_rooms}}</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Bathrooms</b> <a class="float-right">{{property.num_bathrooms}}</a>
+                                </li>
+                            </ul>
+                            <a href="#" style="pointer-events: none;" class="btn btn-primary btn-block"><b>{{property.status}}</b></a>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+
+                    <!-- About Me Box -->
+                
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+                <div class="col-md-9">
+                    <div class="card">
+                        <div class="card-header p-2">
+                            <ul class="nav nav-pills">
+                                <li class="nav-item"><a class="nav-link active" href="#Property"
+                                        data-toggle="tab">About Property</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Timeline</a>
+                                </li>
+                                <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a>
+                                </li><li class="nav-item"><a class="nav-link" href="#pictures" data-toggle="tab">Pictures</a>
+                                </li>
+                            </ul>
+                        </div><!-- /.card-header -->
+                        <div class="card-body">
+                            <div class="tab-content">
+                            <div class="active tab-pane" id="About Property">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="card card-primary">
+                                            <div class="card-header">
+                                                <h3 class="card-title">About Property</h3>
+                                            </div>
+                                            <!-- /.card-header -->
+                                            <div class="card-body">
+                                                <strong><i class="fas fa-book mr-1"></i> Property Estimate Rent ($)</strong>
+                                                <p class="text-muted">{{property.est_rent}}</p>
+                                                <hr>
+                                                <strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>
+                                                <p class="text-muted">{{property.location}}</p>
+                                                <hr>
+                                                <strong><i class="fas fa-pencil-alt mr-1"></i> Property Construction Year</strong>
+                                                <p class="text-muted">{{property.construction_year}}</p>
+                                                <hr>
+                                                <strong><i class="fas fa-bok mr-1"></i>Country</strong>
+                                                <p class="text-muted">{{property.country}}</p>
+                                                <hr>
+                                                <strong><i class="far fa-file-alt mr-1"></i> Property Details</strong>
+                                                <p class="text-muted">{{property.listing_details}}</p>
+                                                <hr>
+                                            </div>
+                                            <!-- /.card-body -->
+                                        </div>
+                                        <!-- /.card -->
+                                    </div>
+                                    <!-- /.col -->
+                                    <div class="col-md-6">
+                                        <div class="card card-primary">
+                                            <div class="card-header">
+                                                <h3 class="card-title">Property Add ons</h3>
+                                            </div>
+                                            <!-- /.card-header -->
+                                            <div class="card-body">
+                                                <strong><i class="fas fa-info mr-1"></i> Garage</strong>
+                                                <p class="text-muted">{{property.has_garage}}</p>
+                                                <hr>
+                                                <strong><i class="fas fa-info mr-1"></i> Swimming Pool</strong>
+                                                <p class="text-muted">{{property.has_swimming_pool}}</p>
+                                                <hr>
+                                                <strong><i class="fas fa-info mr-1"></i> Lawn</strong>
+                                                <p class="text-muted">{{property.has_garage}}</p>
+                                                <hr>
+                                                <strong><i class="fas fa-info mr-1"></i> City</strong>
+                                                <p class="text-muted">{{property.city}}</p>
+                                                <hr>
+                                                <strong><i class="fas fa-info mr-1"></i> State</strong>
+                                                <p class="text-muted">{{property.state}}</p>
+                                                <hr>
+                                            </div>
+                                            <!-- /.card-body -->
+                                        </div>
+                                        <!-- /.card -->
+                                    </div>
+                                    <!-- /.col -->
+                                </div>
+                                <!-- /.row -->
+                            </div>
+
+
+                                <!-- /.tab-pane -->
+                                <div class="tab-pane" id="timeline">
+                                    <!-- The timeline -->
+                                    <div class="timeline timeline-inverse">
+                                        <!-- timeline time label -->
+                                        <div class="time-label">
+                                            <span class="bg-danger">
+                                                10 Feb. 2014
+                                            </span>
+                                        </div>
+                                        <!-- /.timeline-label -->
+                                        <!-- timeline item -->
+                                        <div>
+                                            <i class="fas fa-envelope bg-primary"></i>
+
+                                            <div class="timeline-item">
+                                                <span class="time"><i class="far fa-clock"></i> 12:05</span>
+
+                                                <h3 class="timeline-header"><a href="#">Support Team</a> sent you an
+                                                    email</h3>
+
+                                                <div class="timeline-body">
+                                                    Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
+                                                    weebly ning heekya handango imeem plugg dopplr jibjab, movity
+                                                    jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
+                                                    quora plaxo ideeli hulu weebly balihoo...
+                                                </div>
+                                                <div class="timeline-footer">
+                                                    <a href="#" class="btn btn-primary btn-sm">Read more</a>
+                                                    <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- END timeline item -->
+                                        <!-- timeline item -->
+                                        <div>
+                                            <i class="fas fa-user bg-info"></i>
+
+                                            <div class="timeline-item">
+                                                <span class="time"><i class="far fa-clock"></i> 5 mins ago</span>
+
+                                                <h3 class="timeline-header border-0"><a href="#">Sarah Young</a>
+                                                    accepted your friend request
+                                                </h3>
+                                            </div>
+                                        </div>
+                                        <!-- END timeline item -->
+                                        <!-- timeline item -->
+                                        <div>
+                                            <i class="fas fa-comments bg-warning"></i>
+
+                                            <div class="timeline-item">
+                                                <span class="time"><i class="far fa-clock"></i> 27 mins ago</span>
+
+                                                <h3 class="timeline-header"><a href="#">Jay White</a> commented on your
+                                                    post</h3>
+
+                                                <div class="timeline-body">
+                                                    Take me to your leader!
+                                                    Switzerland is small and neutral!
+                                                    We are more like Germany, ambitious and misunderstood!
+                                                </div>
+                                                <div class="timeline-footer">
+                                                    <a href="#" class="btn btn-warning btn-flat btn-sm">View comment</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- END timeline item -->
+                                        <!-- timeline time label -->
+                                        <div class="time-label">
+                                            <span class="bg-success">
+                                                3 Jan. 2014
+                                            </span>
+                                        </div>
+                                        <!-- /.timeline-label -->
+                                        <!-- timeline item -->
+                                        <div>
+                                            <i class="fas fa-camera bg-purple"></i>
+
+                                            <div class="timeline-item">
+                                                <span class="time"><i class="far fa-clock"></i> 2 days ago</span>
+
+                                                <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos
+                                                </h3>
+
+                                                <div class="timeline-body">
+                                                    <img src="https://placehold.it/150x100" alt="...">
+                                                    <img src="https://placehold.it/150x100" alt="...">
+                                                    <img src="https://placehold.it/150x100" alt="...">
+                                                    <img src="https://placehold.it/150x100" alt="...">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- END timeline item -->
+                                        <div>
+                                            <i class="far fa-clock bg-gray"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.tab-pane -->
+
+                                <div class="tab-pane" id="settings">
+                                    <form class="form-horizontal">
+                                        <div class="form-group row">
+                                            <label for="inputName" class="col-sm-2 col-form-label">Name</label>
+                                            <div class="col-sm-10">
+                                                <input type="email" class="form-control" id="inputName"
+                                                    placeholder="Name">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
+                                            <div class="col-sm-10">
+                                                <input type="email" class="form-control" id="inputEmail"
+                                                    placeholder="Email">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="inputName2" class="col-sm-2 col-form-label">Name</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="inputName2"
+                                                    placeholder="Name">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="inputExperience"
+                                                class="col-sm-2 col-form-label">Experience</label>
+                                            <div class="col-sm-10">
+                                                <textarea class="form-control" id="inputExperience"
+                                                    placeholder="Experience"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="inputSkills" class="col-sm-2 col-form-label">Skills</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="inputSkills"
+                                                    placeholder="Skills">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="offset-sm-2 col-sm-10">
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox"> I agree to the <a href="#">terms and
+                                                            conditions</a>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="offset-sm-2 col-sm-10">
+                                                <button type="submit" class="btn btn-danger">Submit</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- /.tab-pane --><div class="tab-pane" id="pictures">
+
+                                    <div class="container">
+                                       
+                                        <div class="timeline timeline-inverse">
+                                            <!-- timeline time label -->
+                                            <div class="time-label">
+                                                <span class="bg-danger">
+                                                    Property Images
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <i class="fas fa-camera bg-purple"></i>
+                                        
+                                                <div class="timeline-item">
+                                                    <span class="time"><i class="far fa-clock"></i></span>
+                                                    
+                                                    <h3 class="timeline-header"><a href="#"></a> Property Images
+                                                    </h3>
+                                                    <div class="timeline-body">
+                                                        {% if property.images.all %}
+                                                        {% for image in property.images.all %}
+                                                        <div class="col-lg-2">
+                                                            <div class="card text-center">
+                                                                <img src="{{ image.image.url }}" alt="{{image.description}}">
+                                                                
+                                                        </div>
+                                                        {% endfor %}
+                                                        {% else %}
+                                                        <p>No images available for this property.</p>
+                                                        {% endif %}
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- END timeline item -->
+                                            <div>
+                                                <div class="timeline timeline-inverse">
+                                                    <!-- timeline time label -->
+                                                    <div class="time-label">
+                                                        <span class="bg-danger">
+                                                           Property Documents
+                                                        </span>
+                                                    </div>
+                                                    <div>
+                                                <i class="far fa-file bg-gray"></i>
+                                                    <div class="timeline-item">
+                                                        <span class="time"><i class="far fa-clock"></i></span>
+                                                        
+                                                        <h3 class="timeline-header"><a href="#"></a> Property Documents
+                                                        </h3>
+                                                        <div class="timeline-body">
+                                                            {% if property.documents.all %}
+                                                            {% for document in property.documents.all %}
+                                                            <div class="col-lg-3">
+                                                                <div class="card text-center">
+                                                                    <a href="{{ document.file.url }}" class="mt-4" download>{{ document.file.name }}</a>
+                                                                    <hr>
+                                                                    <div class="card-body">
+                                                                        {% if document.description %}
+                                                                        <p class="card-text mt-n3">
+                                                                            {{document.description}}
+                                                                        </p>
+                                                                        {% endif %}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            {% endfor %}
+                                                            {% else %}
+                                                            <p>No images available for this property.</p>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                            </div>
+                                        </div>
 
 </div>
+                                    </div>
+                                   
+                                </div>
+                                <!-- /.tab-pane -->
+                            </div>
+                            <!-- /.tab-content -->
+                        </div><!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
 </section>
 <!-- /.content -->
 </div>
