@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends base_template%}
 {% block title %}Table{% endblock %}
 {% block content %}
 {% load static %}
@@ -86,7 +86,8 @@
                                             </div>
                                             <!--end::Input-->
                                         </div>
-                                        <div class="col-md-6">
+                                        {% if request.user.is_property_dealer %}
+                                        <div class="col-md-3">
                                             <!--begin::Input-->
                                             <div class="form-group">
                                                 <label>Contact Number<span style="color:red;">*</span></label>
@@ -94,6 +95,31 @@
                                             </div>
                                             <!--end::Input-->
                                         </div>
+                                        <div class="col-md-3">
+                                            <!--begin::Input-->
+                                            <div class="form-group">
+                                                <label>Tenant Status<span style="color:red;">*</span></label>
+                                                <select class="form-control form-control-solid" required name="status">
+                                                    <option value="">Select an option</option>
+                                                    <option value="ON_RENT" {% if tenant.status == 'ON_RENT' %} selected{% endif %}>On Rent</option>
+                                                    <option value="PENDING" {% if tenant.status == 'PENDING' %} selected{% endif %}>Pending</option>
+                                                    <option value="APPROVED" {% if tenant.status == 'APPROVED' %} selected{% endif %}>Approved</option>
+                                                    <option value="REJECTED" {% if tenant.status == 'REJECTED' %} selected{% endif %}>Rejected</option>
+                                                </select>
+                                            </div>
+                                            <!--end::Input-->
+                                        </div>
+                                        {% else %}
+                                        <div class="col-md-6">
+                                            <!--begin::Input-->
+                                            <div class="form-group">
+                                                <label>Contact Number<span style="color:red;">*</span></label>
+                                                <input type="text" value="{{tenant.contact_number}}" required class="form-control form-control-solid"
+                                                    name="contact_number" placeholder="Contact Number" />
+                                            </div>
+                                            <!--end::Input-->
+                                        </div>
+                                        {% endif %}
                                     </div>
                                     <!--end::Input-->
 
@@ -203,15 +229,6 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                {% if tenant.agreement_document %}
-                                                <a href="">{{tenant.agreement_document.file.name}}</a>
-                                                {% endif %} <br>
-                                                <label class="mr-4">Document</label>
-                                                <input type="file" class="" name="agreement_document" value="">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
                                                 <label class="mr-4">Is Verified</label>
                                                 <input type="checkbox" class="mt-5" name="is_verified" {% if tenant.is_verified %}checked{% endif %}>
                                             </div>
@@ -233,23 +250,46 @@
                                             </div>
                                         </div>
                                     </div>
-
+                                        
                                     <div class="container">
-                                        <div class="row">
-                                    
-                                            {% if tenant.images.all %}
-                                            {% for image in tenant.images.all %}
+                                        <h4>Images</h4>
+                                        <div class="row">                                            
+                                            {% if tenant.files.all %}
+                                            {% for image in tenant.files.all %}
+                                            {% if image.type == 'image' %}
                                             <div class="col-lg-3">
                                                 <div class="card text-center">
-                                                    <img src="{{ image.image.url }}" class="img-fluid" alt="Waterfall" >
+                                                    <img src="{{ image.file.url }}" class="img-fluid" alt="Waterfall" >
                                                     <input type="checkbox" name="remove_images" value="{{ image.id }}"> Remove
                                                     <div class="card-body">
                                                     </div>
                                                 </div>
                                             </div>
+                                            {% endif %}
                                             {% endfor %}
                                             {% else %}
                                             <p>No images available for this tenant.</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                    <div class="container">
+                                        <h4>Documents</h4>
+                                        <div class="row">
+                                            {% if tenant.files.all %}
+                                            {% for document in tenant.files.all %}
+                                            {% if document.type == 'document' %}
+                                            <div class="col-lg-3">
+                                                <div class="card text-center">
+                                                    <a href="{{ document.file.url }}" class="mt-4" download>{{ document.file.name }}</a>
+                                                    <input type="checkbox" name="remove_documents" value="{{ image.id }}"> Remove
+                                                    <hr>
+                                                </div>
+                                            </div>
+                                            {% endif %}
+                                            {% endfor %}
+                                            {% else %}
+                                            <p>No documents available for this tenant.</p>
                                             {% endif %}
                                         </div>
                                     </div>
@@ -259,31 +299,11 @@
                                            <div class="form-group">
                                             <label for="imageUpload">Upload Images</label>
                                             <input type="file" class="form-control-file" id="imageUpload" name="images"
-                                                accept="image/jpeg, image/png, image/gif, image/bmp" multiple>
+                                                 multiple>
                                             <div class="col-md-12">
                                                 <div id="imagePreview" class="c mt-3 d-flex    "></div> <!-- Container for image previews -->
                                             </div>
                                         </div>
-                                        <script>
-                                            document.getElementById('imageUpload').onchange = function (event) {
-                                                var output = document.getElementById('imagePreview');
-                                                output.innerHTML = '';
-                                                for (var i = 0; i < event.target.files.length; i++) {
-                                                    var file = event.target.files[i];
-                                                    var reader = new FileReader();
-                                                    reader.onload = function (e) {
-                                                        var img = document.createElement('img');
-                                                        img.src = e.target.result;
-                                                        img.className = 'img-thumbnail';
-                                                        var col = document.createElement('div');
-                                                        col.className = 'col-md-12 mb-3 ';
-                                                        col.appendChild(img);
-                                                        output.appendChild(col);
-                                                    }
-                                                    reader.readAsDataURL(file);
-                                                }
-                                            };
-                                        </script>
                                                 <ul id="imageUploads"></ul>
                                             </div>
                                         </div>

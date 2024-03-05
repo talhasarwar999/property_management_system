@@ -1,4 +1,4 @@
-{% extends base_template %}
+{% extends "base.html" %}
 {% block content %}
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
@@ -6,12 +6,12 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">Properties</h1>
+          <h1 class="m-0">Tenants</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="{% url 'property-manager-dashboard' %}">Home</a></li>
-            <li class="breadcrumb-item active">Property</li>
+            <li class="breadcrumb-item active">Tenant</li>
           </ol>
         </div><!-- /.col -->
       </div><!-- /.row -->
@@ -55,53 +55,51 @@
             <div class="card">
                 <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;width: 100%;">
                   <h3 class="card-title" style="margin: 0;"> 
-                    Property List
+                    Tenant List
                   </h3>
-                 <a href="{% url 'create-property' %}" class="btn btn-primary" style="margin-left: auto;">Create Property</a>
+                 <a href="{% url 'create-tenant' %}" class="btn btn-primary" style="margin-left: auto;">Create Tenant</a>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
                   <table id="example2" class="table table-bordered table-hover">
                     <thead>
                       <tr>
-                          <th>Title</th>
-                          <th>Property Type</th>
-                          <th>Property Status</th>
-                          <th>Rent</th>
+                          <th>Name</th>
+                          <th>Property</th>
+                          <th>Broker</th>
                           <th>Address</th>
-                          <th>Country</th>
+                          <th>Lease Start Date</th>
+                          <th>Rent Amount</th>
                           <th>City</th>
                           <th>Actions</th>
                       </tr>
                   </thead>
                   <tbody>
-                    {% for property in properties %}
+                    {% for tenant in tenants %}
                     <tr>
-                        <td>{{ property.title }}</td>
-                        <td>{{ property.property_type }}</td>
-                        <td>{{ property.status }}</td>
-                        <td>{{ property.est_rent }}</td>
-                        <td>{{ property.address }}</td>
-                        <td>{{ property.country }}</td>
-                        <td>{{ property.city }}</td>
+                        <td>{{ tenant.name }}</td>
+                        <td>{{ tenant.property.title }}</td>
+                        <td>{{ tenant.broker.user.username }}</td>
+                        <td>{{ tenant.address }}</td>
+                        <td>{{ tenant.lease_start_date }}</td>
+                        <td>{{ tenant.rent_amount }}</td>
+                        <td>{{ tenant.city }}</td>
                         <td>
-                            <a href="{% url 'view-property' property.id %}"><span class="fas fa-eye text-primary"></span></a>
-                            {% if request.user.is_property_dealer%}
-                            <a href="{% url 'edit-property' property.id %}"><span class="fas fa-edit text-success"></span></a>
-                            <a href="{% url 'delete-property' property.id %}"><span class="fas fa-trash text-danger"></span></a>
-                            {% endif %}
+                            <a href="{% url 'view-tenant' tenant.id %}"><span class="fas fa-eye text-primary"></span></a>
+                            <a href="{% url 'edit-tenant' tenant.id %}"><span class="fas fa-edit text-success"></span></a>
+                            <a href="{% url 'delete-tenant' tenant.id %}"><span class="fas fa-trash text-danger"></span></a>
                         </td>
                     </tr>
                     {% endfor %}
                 </tbody>
                    <tfoot>
                     <tr>
-                      <th>Title</th>
-                      <th>Property Type</th>
-                      <th>Property Status</th>
-                      <th>Rent</th>
+                      <th>Name</th>
+                      <th>Property</th>
+                      <th>Contact</th>
                       <th>Address</th>
-                      <th>Country</th>
+                      <th>Lease Start Date</th>
+                      <th>Rent Amount</th>
                       <th>City</th>
                       <th>Actions</th>
                     </tr>
@@ -112,9 +110,9 @@
                     <!--Pagination-->
                     <nav aria-label="Page navigation example">
                       <ul class="pagination justify-content-center">
-                        {% if properties.has_previous %}
+                        {% if tenants.has_previous %}
                         <li class="page-item">
-                          <a class="page-link" href="?page={{ properties.previous_page_number }}&{{filter_params}}">Previous</a>
+                          <a class="page-link" href="?page={{ tenants.previous_page_number }}&{{filter_params}}">Previous</a>
                         </li>
                         {% else %}
                         <li class="page-item disabled">
@@ -122,32 +120,32 @@
                         </li>
                         {% endif %}
                   
-                        {% if properties.number|add:'-4' > 1 %}
+                        {% if tenants.number|add:'-4' > 1 %}
                         <li class="page-item"><a class="page-link"
-                            href="?page={{ properties.number|add:'-5' }}&{{filter_params}}">&hellip;</a></li>
+                            href="?page={{ tenants.number|add:'-5' }}&{{filter_params}}">&hellip;</a></li>
                         {% endif %}
                   
-                        {% for i in properties.paginator.page_range %}
-                        {% if properties.number == i %}
+                        {% for i in tenants.paginator.page_range %}
+                        {% if tenants.number == i %}
                         <li class="page-item active" aria-current="page">
                           <span class="page-link">
                             {{ i }}
                             <span class="sr-only">(current)</span>
                           </span>
                         </li>
-                        {% elif i > properties.number|add:'-5' and i < properties.number|add:'5' %} <li class="page-item"><a
+                        {% elif i > tenants.number|add:'-5' and i < tenants.number|add:'5' %} <li class="page-item"><a
                             class="page-link" href="?page={{ i }}&{{filter_params}}">{{ i }}</a></li>
                           {% endif %}
                           {% endfor %}
                   
-                          {% if properties.paginator.num_pages > properties.number|add:'4' %}
+                          {% if tenants.paginator.num_pages > tenants.number|add:'4' %}
                           <li class="page-item"><a class="page-link"
-                              href="?page={{ properties.number|add:'5' }}&{{filter_params}}">&hellip;</a></li>
+                              href="?page={{ tenants.number|add:'5' }}&{{filter_params}}">&hellip;</a></li>
                           {% endif %}
                   
-                          {% if properties.has_next %}
+                          {% if tenants.has_next %}
                           <li class="page-item">
-                            <a class="page-link" href="?page={{ properties.next_page_number }}&{{filter_params}}">Next</a>
+                            <a class="page-link" href="?page={{ tenants.next_page_number }}&{{filter_params}}">Next</a>
                           </li>
                           {% else %}
                           <li class="page-item disabled">

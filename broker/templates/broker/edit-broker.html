@@ -64,20 +64,7 @@
                                 <!--begin: Wizard Step 1-->
                                 <div>
                                     <div class="row">
-                                        <div class="col-md-3">
-                                            <!--begin::Input-->
-                                            <div class="form-group">
-                                                <label>Property<span style="color:red;">*</span></label>
-                                                <select class="form-control form-control-solid" required name="property">
-                                                    <option value="">Select an option</option>
-                                                    {% for property in properties %}
-                                                    <option value="{{property.id}}" {% if broker.property.id == property.id%}selected{%endif%}>{{property.title}}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                            <!--end::Input-->
-                                        </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-6">
                                             <!--begin::Input-->
                                             <div class="form-group">
                                                 <label>Name<span style="color:red;">*</span></label>
@@ -156,51 +143,40 @@
                                     </div>
                                     <div class="row">
                             
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Lease Start Date<span style="color:red;">*</span></label>
-                                                <input type="date" class="form-control " required name="lease_start_date" value="{{broker.lease_start_date|date:'Y-m-d'}}" placeholder="LSD">
-                                            </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>License Number<span style="color:red;">*</span></label>
+                                            <input type="text" required class="form-control form-control-solid" name="license_number" value="{{broker.license_number}}"
+                                                placeholder="License Number">
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Lease End Date<span style="color:red;">*</span></label>
-                                                <input type="date" class="form-control " required name="lease_end_date" value="{{broker.lease_end_date|date:'Y-m-d'}}" placeholder="LED">
-                                            </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Company Name<span style="color:red;">*</span></label>
+                                            <input type="text" required class="form-control form-control-solid" name="company_name" value="{{broker.company_name}}"
+                                                placeholder="Company Name">
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Rent Amount<span style="color:red;">*</span></label>
-                                                <input type="number" required class="form-control form-control-solid"  name="rent_amount" value="{{broker.rent_amount}}"
-                                                    placeholder="Rent Amount">
-                                            </div>
+                                    </div>
+                                    
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Years of Experience<span style="color:red;">*</span></label>
+                                            <input type="number" required class="form-control form-control-solid" name="years_of_experience" value="{{broker.years_of_experience}}"
+                                                placeholder="Years of Exp.">
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Security Deposit<span style="color:red;">*</span></label>
-                                                <input type="number" required class="form-control form-control-solid" name="security_deposit" value="{{broker.security_deposit}}"
-                                                    placeholder="Security Deposit">
-                                            </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            {% if broker.logo %}
+                                            <a href="">{{broker.logo.name}}</a>
+                                            {% endif %} <br>
+                                            <label class="mr-4">Picture</label>
+                                            <input type="file" class="mt-" name="logo" value="">
                                         </div>
+                                    </div>
                                     </div>
                             
                                     <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Annual Income</label>
-                                                <input type="number" class="form-control form-control-solid" name="annual_income" value="{{broker.annual_income}}"
-                                                    placeholder="Annual Income">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                {% if broker.logo %}
-                                                <a href="">{{broker.logo.name}}</a>
-                                                {% endif %} <br>
-                                                <label class="mr-4">Picture</label>
-                                                <input type="file" class="mt-" name="logo" value="">
-                                            </div>
-                                        </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 {% if broker.agreement_document %}
@@ -212,19 +188,20 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label class="mr-4">Is Verified</label>
-                                                <input type="checkbox" class="mt-5" name="is_verified" {% if broker.is_verified %}checked{% endif %}>
+                                                <label class="mr-4">Accepting Clients?</label>
+                                                <input type="checkbox" class="mt-5" name="is_accepting_new_clients" {% if broker.is_accepting_new_clients %}checked{% endif %}>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Payment History</label>
+                                                <textarea type="text-area" class="form-control" name="payment_history"
+                                                    rows="3">{{broker.payment_history}}</textarea>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Payment History</label>
-                                            <textarea type="text-area" class="form-control" name="payment_history" rows="3">{{broker.payment_history}}</textarea>
-                                        </div>
-                                    </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Notes</label>

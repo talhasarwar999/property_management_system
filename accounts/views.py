@@ -2,11 +2,12 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
 from django.contrib import messages
 from .forms import SignUpForm
 from property_manager.models import PropertyDealer
 from property_manager.decorators import property_dealer_required
-
+User = get_user_model()
 
 def signin(request):
     """
@@ -24,7 +25,10 @@ def signin(request):
             messages.success(
                 request, "Authentication successful. You are now logged in"
             )
-            return redirect("property-manager-dashboard")
+            if user.is_broker:
+                return redirect("broker-dashboard")
+            if user.is_property_dealer:
+                return redirect("property-manager-dashboard")
         else:
             messages.error(request, "Invalid username or password.")
             return redirect("signin")

@@ -16,10 +16,5 @@ urlpatterns = [
     path("create-property/", views.create_property, name="create-property"),
     path("edit-property/<pk>/", views.edit_property, name="edit-property"),
 
-    # Tenant urls
-    path("tenant-list/", views.tenant_list, name="tenant-list"),
-    path("delete-tenant/<pk>/", views.delete_tenant, name="delete-tenant"),
-    path("view-tenant/<pk>/", views.view_tenant, name="view-tenant"),
-    path("edit-tenant/<pk>/", views.edit_tenant, name="edit-tenant"),
-    path("create-tenant/", views.create_tenant, name="create-tenant"),
+
 ]

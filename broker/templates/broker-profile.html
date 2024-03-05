@@ -1,5 +1,5 @@
 
-{% extends "base.html" %}
+{% extends "broker-base.html" %}
 {% block title %}Table{% endblock %}
 {% block content %}
 {% load static %}
@@ -10,11 +10,11 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Property Manager Profile</h1>
+            <h1 class="m-0">Broker Profile</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="{% url 'property-manager-dashboard' %}">Home</a></li>
+              <li class="breadcrumb-item"><a href="{% url 'broker-dashboard' %}">Home</a></li>
               <li class="breadcrumb-item active">Profile</li>
             </ol>
           </div><!-- /.col -->
@@ -61,9 +61,9 @@
         <div class="col-lg-4">
           <div class="card">
             <div class="card-body text-center">
-                {% if request.user.is_authenticated and request.user.propertydealer %}
-                {% if request.user.propertydealer.logo %}
-                <img src="{{ request.user.propertydealer.logo.url }}" class="rounded-circle img-fluid" style="width: 150px;">
+                {% if request.user.is_authenticated %}
+                {% if broker.logo %}
+                <img src="{{ broker.logo.url }}" class="rounded-circle img-fluid" style="width: 150px;">
                 {% else %}
                 <img src="{% static 'img/static-property-manager-image.jpeg' %}" class="rounded-circle img-fluid" style="width: 150px;">
                 {% endif %}
@@ -71,9 +71,9 @@
                 {% else %}
                 <img src="{% static 'img/static-property-manager-image.jpeg' %}" class="rounded-circle img-fluid" style="width: 150px;">
                 {% endif %}
-              <h5 class="my-2">{{property_manager.user.username}}</h5>
-              <p class="text-muted mb-1">{{property_manager.user.email}}</p>
-              <p class="text-muted">{{property_manager.address}}</p>
+              <h5 class="my-2">{{broker.user.username}}</h5>
+              <p class="text-muted mb-1">{{broker.user.email}}</p>
+              <p class="text-muted">{{broker.address}}</p>
             </div>
           </div>
         </div>
@@ -85,7 +85,7 @@
                   <p class="mb-0">UserName</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0">{{property_manager.user.username}}</p>
+                  <p class="text-muted mb-0">{{broker.user.username}}</p>
                 </div>
               </div>
               <hr>
@@ -94,7 +94,7 @@
                   <p class="mb-0">Email</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0">{{property_manager.user.email}}</p>
+                  <p class="text-muted mb-0">{{broker.user.email}}</p>
                 </div>
               </div>
               <hr>
@@ -103,7 +103,7 @@
                   <p class="mb-0">Phone</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0">{{property_manager.contact_number}}</p>
+                  <p class="text-muted mb-0">{{broker.contact_number}}</p>
                 </div>
               </div>
               <hr>
@@ -112,16 +112,16 @@
                   <p class="mb-0">Address</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0">{{property_manager.address}}</p>
+                  <p class="text-muted mb-0">{{broker.address}}</p>
                 </div>
               </div>
               <hr>
               <div class="row">
                 <div class="col-sm-3">
-                  <p class="mb-0">Website</p>
+                  <p class="mb-0">City</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0">{{property_manager.website}}</p>
+                  <p class="text-muted mb-0">{{broker.city}}</p>
                 </div>
               </div>
             </div>
@@ -133,44 +133,44 @@
           <h4 class="mb-3">Update Profile</h4>
         <div class="card">
           <div class="card-body text-center">
-            <form action="{% url 'property-manager-profile' %}" method="POST" enctype="multipart/form-data">
+            <form action="{% url 'broker-profile' %}" method="POST" enctype="multipart/form-data">
               {% csrf_token %}
             <div class="form-group row mb-3">
               <label for="username" class="col-sm-3 col-form-label text-right">Username:</label>
               <div class="col-sm-9">
-                <input type="text" class="form-control" id="username" name="username" value="{{property_manager.user.username}}" required>
+                <input type="text" class="form-control" id="username" name="username" value="{{broker.user.username}}" required>
               </div>
             </div>
             <div class="form-group row mb-3">
               <label for="email" class="col-sm-3 col-form-label text-right">Email:</label>
               <div class="col-sm-9">
-                <input type="email" class="form-control" id="email" name="email" value="{{property_manager.user.email}}" required>
+                <input type="email" class="form-control" id="email" name="email" value="{{broker.user.email}}" required>
               </div>
             </div>
             <div class="form-group row mb-3">
               <label for="email" class="col-sm-3 col-form-label text-right">Company Name:</label>
               <div class="col-sm-9">
-                <input type="text" class="form-control" id="email" name="company_name"  value="{{property_manager.company_name}}" required >
+                <input type="text" class="form-control" id="email" name="company_name"  value="{{broker.company_name}}" required >
               </div>
             </div>
             <div class="form-group row mb-3">
               <label for="number" class="col-sm-3 col-form-label text-right">Contact:</label>
               <div class="col-sm-9">
-                <input type="number" class="form-control" id="email" name="contact_number" placeholder="Contact Number" value="{{property_manager.contact_number}}" required>
+                <input type="text" class="form-control" id="email" name="contact_number" placeholder="Contact Number" value="{{broker.contact_number}}" required>
               </div>
             </div>
             <div class="form-group row mb-3">
               <label for="email" class="col-sm-3 col-form-label text-right">Address:</label>
               <div class="col-sm-9">
                 <input type="text" class="form-control" id="email" name="address" placeholder="Address"
-                  value="{{property_manager.address}}" required>
+                  value="{{broker.address}}" required>
               </div>
             </div>
             <div class="form-group row mb-3">
-              <label for="email" class="col-sm-3 col-form-label text-right">Website:</label>
+              <label for="email" class="col-sm-3 col-form-label text-right">City:</label>
               <div class="col-sm-9">
                 <input type="text" class="form-control" id="email" name="website" placeholder="Website"
-                  value="{{property_manager.website}}" required>
+                  value="{{broker.city}}" required>
               </div>
             </div>
             <div class="form-group row mb-3">
@@ -195,7 +195,7 @@
             <h4 class="mb-3">Update Password</h4>
           <div class="card">
             <div class="card-body text-center">
-              <form action="{% url 'change-password' %}" method="POST">
+              <form action="{% url 'change-broker-password' %}" method="POST">
                 {% csrf_token %}
               <div class="form-group row mb-3">
                 <label for="email" class="col-sm-3 col-form-label text-right">Old Password:</label>

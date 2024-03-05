@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'accounts',
     'property_manager',
     'tanant',
+    'broker',
 ]
 
 MIDDLEWARE = [

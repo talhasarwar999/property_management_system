@@ -26,24 +26,4 @@ class PropertyForm(forms.ModelForm):
     class Meta:
         model = Property
         fields = '__all__'
-        exclude = ['owner', 'images', 'documents']
-
-
-class TanantForm(forms.ModelForm):
-    username = forms.CharField(required=True)
-    email = forms.EmailField(required=True)
-    password = forms.CharField(widget=forms.PasswordInput(), required=True)
-    confirm_password = forms.CharField(widget=forms.PasswordInput(), required=True)
-
-    class Meta:
-        model = Tanant
-        fields = '__all__'
-        exclude = ['user', 'images']
-
-    def __init__(self, *args, **kwargs):
-        instance = kwargs.get('instance', None)
-        super(TanantForm, self).__init__(*args, **kwargs)
-
-        if instance and instance.pk:
-            self.fields['password'].required = False
-            self.fields['confirm_password'].required = False
+        exclude = ['owner', 'files']
