@@ -13,7 +13,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Tenant Profile</li>
+                        <li class="breadcrumb-item active">User Profile</li>
                     </ol>
                 </div>
             </div>
@@ -24,44 +24,44 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-3">
-
-                    <!-- Profile Image -->
-                    <div class="card card-primary card-outline">
-                        <div class="card-body box-profile">
-                            <div class="col-sm-9">
-                                {% if tenant.logo %}
-                                <img src="{{ tenant.logo.url }}" class="rounded-circle img-fluid" style="width: 150px;">
-                                {% endif %}
-                            </div>
-
-                            <h3 class="profile-username text-center">{{tenant.user.username}}</h3>
-
-
-                            <ul class="list-group list-group-unbordered mb-3">
-                                <li class="list-group-item">
-                                    <b>Email</b> <a class="float-right">{{tenant.user.email}}</a>
-                                </li>
-                                <li class="list-group-item">
-                                    <b>Contact</b> <a class="float-right">{{tenant.contact_number}}</a>
-                                </li>
-                                <li class="list-group-item">
-                                    <b>Country</b> <a class="float-right">{{tenant.country}}</a>
-                                </li>
-                            </ul>
-                            <button style="pointer-events: none;"
-                                class="btn btn-block {% if tenant.is_verified %}btn-success{% else %}btn-danger{% endif %}" role="button">
-                                <b>{% if tenant.is_verified %}True{% else %}False{% endif %}</b>
-                            </button>
+            <div class="col-md-3">
+                <!-- Profile Image -->
+                <div class="card card-primary card-outline">
+                    <div class="card-body box-profile">
+                        <div class="col-sm-12 text-center">
+                            {% if tenant.files.all %}
+                            {% for image in tenant.files.all %}
+                            {% if image.type == 'profile' and image.file %}
+                            <img src="{{ image.file.url }}" class="rounded-circle img-fluid" style="width: 150px;">
+                            {% endif %}
+                            {% endfor %}
+                            {% endif %}
                         </div>
-                        <!-- /.card-body -->
+            
+                        <h3 class="profile-username text-center">{{tenant.user.username}}</h3>
+            
+                        <ul class="list-group list-group-unbordered mb-3">
+                            <li class="list-group-item">
+                                <b>Email</b> <a class="float-right">{{tenant.user.email}}</a>
+                            </li>
+                            <li class="list-group-item">
+                                <b>Contact</b> <a class="float-right">{{tenant.contact_number}}</a>
+                            </li>
+                            <li class="list-group-item">
+                                <b>Country</b> <a class="float-right">{{tenant.country}}</a>
+                            </li>
+                        </ul>
+            
+                        <button style="pointer-events: none;"
+                            class="btn btn-block {% if tenant.is_verified %}btn-success{% else %}btn-danger{% endif %}"
+                            role="button">
+                            <b>{% if tenant.is_verified %}True{% else %}False{% endif %}</b>
+                        </button>
                     </div>
-                    <!-- /.card -->
-
-                    <!-- About Me Box -->
-
-                    <!-- /.card -->
+                    <!-- /.card-body -->
                 </div>
+                <!-- /.card -->
+            </div>
                 <!-- /.col -->
                 <div class="col-md-9">
                     <div class="card">
@@ -84,7 +84,7 @@
                                         <div class="col-md-6">
                                             <div class="card card-primary">
                                                 <div class="card-header">
-                                                    <h3 class="card-title">AboutTenant</h3>
+                                                    <h3 class="card-title">About Tenant</h3>
                                                 </div>
                                                 <!-- /.card-header -->
                                                 <div class="card-body">
@@ -131,7 +131,7 @@
                                                     <p class="text-muted">{{tenant.city}}</p>
                                                     <hr>
                                                     <strong><i class="fas fa-info mr-1"></i> State</strong>
-                                                    <p class="text-muted">{{tenant.state}}</p>
+                                                    <p class="text-muted">{{tenant.State}}</p>
                                                     <hr>
                                                 </div>
                                                 <!-- /.card-body -->
@@ -300,121 +300,104 @@
                                         </div>
                                     </form>
                                 </div>
-                                <div class="col-sm-9">
-                                    <p class="text-muted mb-0">{{tenant.rent_amount}}</p>
-                                </div>
-                            </div>
-                            <hr>
-
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <p class="mb-0">Security Deposit</p>
-                                </div>
-                                <div class="col-sm-9">
-                                    <p class="text-muted mb-0">{{tenant.security_deposit}}</p>
-                                </div>
-                            </div>
-                            <hr>
-
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <p class="mb-0">Payment History</p>
-                                </div>
-                                <div class="col-sm-9">
-                                    <p class="text-muted mb-0">{{tenant.payment_history}}</p>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <p class="mb-0">Annual Income</p>
-                                </div>
-                                <div class="col-sm-9">
-                                    <p class="text-muted mb-0">{{tenant.annual_income}}</p>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <p class="mb-0">Picture</p>
-                                </div>
-                                <div class="col-sm-9">
-                                    {% if tenant.files.all %}
-                                    {% for image in tenant.files.all %}
-                                    {% if image.type == 'profile' %}
-                                    <img src="{{ image.file.url }}" class="rounded-circle img-fluid" style="width: 150px;">
-                                    {% endif %}
-                                    {% endfor %}
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <p class="mb-0">Notes</p>
-                                </div>
-                                <hr>
-                                <div class="col-sm-9">
-                                    <p class="text-muted mb-0">{{tenant.notes}}</p>
-                                    
-                                </div>
-                                </div>
-                                <hr>
-                                <div class="row">
-                                <div class="col-sm-3">
-                                    <p class="mb-0">Is Verified</p>
-                                </div>
-                                <div class="col-sm-9">
-                                    <p class="text-muted mb-0">{{tenant.is_verified}}</p>
+                                <!-- /.tab-pane -->
+                                <!-- /.tab-pane -->
+                                <div class="tab-pane" id="pictures">
+                                
+                                    <div class="container">
+                                
+                                        <div class="timeline timeline-inverse">
+                                            <!-- timeline time label -->
+                                            <div class="time-label">
+                                                <span class="bg-danger">
+                                                    Property Images
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <i class="fas fa-camera bg-purple"></i>
+                                
+                                                <div class="timeline-item">
+                                                    <span class="time"><i class="far fa-clock"></i></span>
+                                
+                                                    <h3 class="timeline-header"><a href="#"></a> Property Images
+                                                    </h3>
+                                                    <div class="timeline-body">
+                                                        {% if tenant.files.all %}
+                                                        <div class="row">
+                                                            {% for image in tenent.files.all %}
+                                                            {% if image.type == 'image' and image.file.url %}
+                                                            <div class="col-lg-2">
+                                                                <div class="card text-center">
+                                                                    <img src="{{ image.file.url }}" class="card-img-top" alt="Waterfall"
+                                                                        style="height: 100px;">
+                                                                </div>
+                                                            </div>
+                                                            {% endif %}
+                                                            {% endfor %}
+                                                        </div>
+                                                        {% else %}
+                                                        <p>No Tenant images available for this property.</p>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- END timeline item -->
+                                            <div>
+                                                <div class="timeline timeline-inverse">
+                                                    <!-- timeline time label -->
+                                                    <div class="time-label">
+                                                        <span class="bg-danger">
+                                                            Property Documents
+                                                        </span>
+                                                    </div>
+                                                    <div>
+                                                        <i class="far fa-file bg-gray"></i>
+                                                        <div class="timeline-item">
+                                                            <span class="time"><i class="far fa-clock"></i></span>
+                                
+                                                            <h3 class="timeline-header"><a href="#"></a> Property Documents
+                                                            </h3>
+                                                            <div class="timeline-body">
+                                                                {% if tenant.files.all %}
+                                                                {% for document in tenant.files.all %}
+                                                                {% if document.type == 'document' and document.file.url %}
+                                                                <div class="col-lg-3">
+                                                                    <div class="card text-center">
+                                                                        <a href="{{ document.file.url }}" class="mt-4" download>{{ document.file.name
+                                                                            }}</a>
+                                                                        <hr>
+                                                                        <div class="card-body">
+                                                                            {% if document.description %}
+                                                                            <p class="card-text mt-n3">
+                                                                                {{document.description}}
+                                                                            </p>
+                                                                            {% endif %}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                {% endif %}
+                                                                {% endfor %}
+                                                                {% else %}
+                                                                <p>No Tenant documents available for this property.</p>
+                                                                {% endif %}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                
+                                        </div>
+                                    </div>
                                 
                                 </div>
+                                <!-- /.tab-pane -->
                             </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div></div>
-           
-            <div class="container">
-                <h4>Tenant Images</h4>
-            <div class="row">
-                
-                {% if tenant.files.all %}
-                {% for image in tenant.files.all %}
-                {% if image.type == 'image' %}
-                <div class="col-lg-3">
-                    <div class="card text-center">
-                        <img src="{{ image.file.url }}" class="card-img-top"
-                            alt="Waterfall"  style="height: 250px;">
+                            <!-- /.tab-content -->
+                        </div><!-- /.card-body -->
                     </div>
                     <!-- /.card -->
                 </div>
-                {% endif %}
-                {% endfor %}
-                {% else %}
-                <p>No images available for this tenant.</p>
-                {% endif %}
-    </div>
-        </div>
-
-
-        <div class="container">
-            <h4>Tenant Document</h4>
-            <div class="row">
-                {% if tenant.files.all %}
-                {% for document in tenant.files.all %}
-                {% if document.type == 'document' %}
-                <div class="col-lg-3">
-                    <div class="card text-center">
-                        <a href="{{ document.file.url }}" class="mt-4" download>{{ document.file.name }}</a>
-                        <hr>
-                    </div>
-                </div>
-                {% endif %}
-                {% endfor %}
-                {% else %}
-                <p>No documents available for this tenant.</p>
-                {% endif %}
+                <!-- /.col -->
             </div>
             <!-- /.row -->
         </div><!-- /.container-fluid -->

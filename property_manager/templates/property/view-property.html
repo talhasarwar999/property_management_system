@@ -33,8 +33,14 @@
                     <div class="card card-primary card-outline">
                         <div class="card-body box-profile">
                             <div class="text-center">
-                                {% if property.images.all %}
-                                <img class="profile-user-img img-fluid img-circle" src="{{ property.images.all.0.image.url }}" alt="Property Image">
+                                {% if property.files.all %}
+                                {% for image in property.files.all %}
+                                {% if image.type == 'image' and image.file.url and forloop.counter == 1 %}
+                               
+                                <img class="profile-user-img img-fluid img-circle" src="{{ image.file.url }}" alt="Property Image">
+                                
+                                {% endif %}
+                                {% endfor %}
                                 {% else %}
                                 <img class="profile-user-img img-fluid img-circle" src="../../dist/img/user4-128x128.jpg"
                                     alt="User profile picture">
@@ -322,20 +328,23 @@
                                                     
                                                     <h3 class="timeline-header"><a href="#"></a> Property Images
                                                     </h3>
-                                                    <div class="timeline-body">
-                                                        {% if property.images.all %}
-                                                        {% for image in property.images.all %}
+                                                <div class="timeline-body">
+                                                    {% if property.files.all %}
+                                                    <div class="row">
+                                                    {% for image in property.files.all %}
+                                                    {% if image.type == 'image' and image.file.url %}
                                                         <div class="col-lg-2">
                                                             <div class="card text-center">
-                                                                <img src="{{ image.image.url }}" alt="{{image.description}}">
-                                                                
+                                                                <img src="{{ image.file.url }}" class="card-img-top" alt="Waterfall" style="height: 100px;">
+                                                            </div>
                                                         </div>
+                                                        {% endif %}
                                                         {% endfor %}
+                                                        </div>
                                                         {% else %}
                                                         <p>No images available for this property.</p>
                                                         {% endif %}
-                                                    </div>
-                                                    </div>
+                                                </div>
                                                 </div>
                                             </div>
                                             <!-- END timeline item -->
@@ -355,8 +364,9 @@
                                                         <h3 class="timeline-header"><a href="#"></a> Property Documents
                                                         </h3>
                                                         <div class="timeline-body">
-                                                            {% if property.documents.all %}
-                                                            {% for document in property.documents.all %}
+                                                        {% if property.files.all %}
+                                                        {% for document in property.files.all %}
+                                                        {% if document.type == 'document' and document.file.url %}
                                                             <div class="col-lg-3">
                                                                 <div class="card text-center">
                                                                     <a href="{{ document.file.url }}" class="mt-4" download>{{ document.file.name }}</a>
@@ -370,9 +380,10 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            {% endif %}
                                                             {% endfor %}
                                                             {% else %}
-                                                            <p>No images available for this property.</p>
+                                                            <p>No documents available for this property.</p>
                                                             {% endif %}
                                                         </div>
                                                     </div>

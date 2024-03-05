@@ -25,3 +25,10 @@ class Broker(models.Model):
 
     def __str__(self):
         return self.name
+    
+    @property
+    def get_profile_pic(self):
+
+        broker_file = self.files.filter(type="profile").first()
+        print("broker_file::",broker_file.file)
+        # return broker_file.file
