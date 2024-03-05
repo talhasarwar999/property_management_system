@@ -71,21 +71,7 @@
                                 <!--begin: Wizard Step 1-->
                                 <div>
                                     <div class="row">
-                                        <div class="col-md-3">
-                                            <!--begin::Input-->
-                                            <div class="form-group">
-                                                <label>Property<span style="color:red;">*</span></label>
-                                                <select class="form-control form-control-solid" required
-                                                    name="property">
-                                                    <option value="">Select an option</option>
-                                                    {% for property in properties %}
-                                                    <option value="{{property.id}}">{{property.title}}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                            <!--end::Input-->
-                                        </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-6">
                                             <!--begin::Input-->
                                             <div class="form-group">
                                                 <label>Name<span style="color:red;">*</span></label>
@@ -132,7 +118,7 @@
                                             <div class="form-group">
                                                 <label>Password<span style="color:red;">*</span></label>
                                                 <input type="password" required class="form-control form-control-solid"
-                                                    name="password" placeholder="Contact Number" />
+                                                    name="password" placeholder="Password" />
                                             </div>
                                             <!--end::Input-->
                                         </div>
@@ -185,43 +171,26 @@
                                         </div>
                                     </div>
                                     <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>License Number<span style="color:red;">*</span></label>
+                                                <input type="text" required class="form-control form-control-solid"
+                                                    name="license_number" value="" placeholder="License Number">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Company Name<span style="color:red;">*</span></label>
+                                            <input type="text" required class="form-control form-control-solid" name="company_name" value=""
+                                                placeholder="Company Name">
+                                        </div>
+                                        </div>
 
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Lease Start Date<span style="color:red;">*</span></label>
-                                                <input type="date" class="form-control " required
-                                                    name="lease_start_date" value="" placeholder="LSD">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Lease End Date<span style="color:red;">*</span></label>
-                                                <input type="date" class="form-control " required name="lease_end_date"
-                                                    value="" placeholder="LED">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Rent Amount<span style="color:red;">*</span></label>
-                                                <input type="number" required class="form-control form-control-solid"
-                                                    name="rent_amount" value="" placeholder="Rent Amount">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Security Deposit<span style="color:red;">*</span></label>
-                                                <input type="number" required class="form-control form-control-solid"
-                                                    name="security_deposit" value="" placeholder="Security Deposit">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Annual Income</label>
-                                                <input type="number" class="form-control form-control-solid"
-                                                    name="annual_income" value="" placeholder="Annual Income">
+                                                <label>Years of Experience<span style="color:red;">*</span></label>
+                                                <input type="number" required class="form-control form-control-solid" name="years_of_experience" value=""
+                                                    placeholder="Years of Exp.">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -230,6 +199,9 @@
                                                 <input type="file" class="mt-" name="logo" value="">
                                             </div>
                                         </div>
+                                    </div>
+
+                                    <div class="row"> 
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label class="mr-4">Document</label>
@@ -238,20 +210,20 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label class="mr-4">Is Verified</label>
-                                                <input type="checkbox" class="mt-5" name="is_verified" value="">
+                                                <label class="mr-4">Accepting Clients?</label>
+                                                <input type="checkbox" class="mt-5" name="is_accepting_new_clients" value="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Bio</label>
+                                                <textarea type="text-area" class="form-control" name="bio" value="" rows="3"></textarea>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Payment History</label>
-                                                <textarea type="text-area" class="form-control" name="payment_history"
-                                                    value="" rows="3"></textarea>
-                                            </div>
-                                        </div>
+                                        
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Notes</label>

@@ -7,7 +7,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('accounts.urls')),
     path('property-manager/', include('property_manager.urls')),
-    path('tanant-dashboard/', include('tanant.urls')),
+    path('tenant/', include('tanant.urls')),
+    path('broker/', include('broker.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

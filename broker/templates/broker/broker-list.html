@@ -6,12 +6,12 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">brokers</h1>
+          <h1 class="m-0">Brokers</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="{% url 'property-manager-dashboard' %}">Home</a></li>
-            <li class="breadcrumb-item active">broker</li>
+            <li class="breadcrumb-item active">Broker</li>
           </ol>
         </div><!-- /.col -->
       </div><!-- /.row -->
@@ -65,12 +65,12 @@
                     <thead>
                       <tr>
                           <th>Name</th>
-                          <th>Property</th>
-                          <th>Contact</th>
+                          <th>Username</th>
                           <th>Address</th>
-                          <th>Lease Start Date</th>
-                          <th>Rent Amount</th>
                           <th>City</th>
+                          <th>Contact</th>
+                          <th>Company Name</th> 
+                          <th>Accepting Clients?</th>
                           <th>Actions</th>
                       </tr>
                   </thead>
@@ -78,12 +78,12 @@
                     {% for broker in brokers %}
                     <tr>
                         <td>{{ broker.name }}</td>
-                        <td>{{ broker.property.title }}</td>
-                        <td>{{ broker.contact_number }}</td>
+                        <td>{{ broker.user.username }}</td>
                         <td>{{ broker.address }}</td>
-                        <td>{{ broker.lease_start_date }}</td>
-                        <td>{{ broker.rent_amount }}</td>
                         <td>{{ broker.city }}</td>
+                        <td>{{ broker.contact_number }}</td>
+                        <td>{{ broker.company_name }}</td>
+                        <td>{{ broker.is_accepting_new_clients }}</td>
                         <td>
                             <a href="{% url 'view-broker' broker.id %}"><span class="fas fa-eye text-primary"></span></a>
                             <a href="{% url 'edit-broker' broker.id %}"><span class="fas fa-edit text-success"></span></a>
@@ -95,12 +95,12 @@
                    <tfoot>
                     <tr>
                       <th>Name</th>
-                      <th>Property</th>
                       <th>Contact</th>
                       <th>Address</th>
-                      <th>Lease Start Date</th>
-                      <th>Rent Amount</th>
                       <th>City</th>
+                      <th>License Number</th>
+                      <th>Company Name</th>
+                      <th>Accepting Clients?</th>
                       <th>Actions</th>
                     </tr>
                     </tfoot>

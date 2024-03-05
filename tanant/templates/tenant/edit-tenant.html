@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends base_template%}
 {% block title %}Table{% endblock %}
 {% block content %}
 {% load static %}
@@ -8,12 +8,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Edit broker</h1>
+                    <h1 class="m-0">Edit Tenant</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{% url 'property-manager-dashboard' %}">Home</a></li>
-                        <li class="breadcrumb-item active">broker</li>
+                        <li class="breadcrumb-item active">Tenant</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -59,7 +59,7 @@
                 <div class="col-lg-12">
                     <div class="card mb-4">
                         <div class="card-body">
-                            <form action="{% url 'edit-broker' broker.id %}" method="POST" class="form" id="kt_form" enctype="multipart/form-data">
+                            <form action="{% url 'edit-tenant' tenant.id %}" method="POST" class="form" id="kt_form" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 <!--begin: Wizard Step 1-->
                                 <div>
@@ -71,7 +71,7 @@
                                                 <select class="form-control form-control-solid" required name="property">
                                                     <option value="">Select an option</option>
                                                     {% for property in properties %}
-                                                    <option value="{{property.id}}" {% if broker.property.id == property.id%}selected{%endif%}>{{property.title}}</option>
+                                                    <option value="{{property.id}}" {% if tenant.property.id == property.id%}selected{%endif%}>{{property.title}}</option>
                                                     {% endfor %}
                                                 </select>
                                             </div>
@@ -82,18 +82,44 @@
                                             <div class="form-group">
                                                 <label>Name<span style="color:red;">*</span></label>
                                                 <input type="text" required class="form-control form-control-solid"
-                                                    name="name" value="{{broker.name}}" placeholder="Name" />
+                                                    name="name" value="{{tenant.name}}" placeholder="Name" />
                                             </div>
                                             <!--end::Input-->
                                         </div>
+                                        {% if request.user.is_property_dealer %}
+                                        <div class="col-md-3">
+                                            <!--begin::Input-->
+                                            <div class="form-group">
+                                                <label>Contact Number<span style="color:red;">*</span></label>
+                                                <input type="text" value="{{tenant.contact_number}}" required class="form-control form-control-solid" name="contact_number" placeholder="Contact Number" />
+                                            </div>
+                                            <!--end::Input-->
+                                        </div>
+                                        <div class="col-md-3">
+                                            <!--begin::Input-->
+                                            <div class="form-group">
+                                                <label>Tenant Status<span style="color:red;">*</span></label>
+                                                <select class="form-control form-control-solid" required name="status">
+                                                    <option value="">Select an option</option>
+                                                    <option value="ON_RENT" {% if tenant.status == 'ON_RENT' %} selected{% endif %}>On Rent</option>
+                                                    <option value="PENDING" {% if tenant.status == 'PENDING' %} selected{% endif %}>Pending</option>
+                                                    <option value="APPROVED" {% if tenant.status == 'APPROVED' %} selected{% endif %}>Approved</option>
+                                                    <option value="REJECTED" {% if tenant.status == 'REJECTED' %} selected{% endif %}>Rejected</option>
+                                                </select>
+                                            </div>
+                                            <!--end::Input-->
+                                        </div>
+                                        {% else %}
                                         <div class="col-md-6">
                                             <!--begin::Input-->
                                             <div class="form-group">
                                                 <label>Contact Number<span style="color:red;">*</span></label>
-                                                <input type="text" value="{{broker.contact_number}}" required class="form-control form-control-solid" name="contact_number" placeholder="Contact Number" />
+                                                <input type="text" value="{{tenant.contact_number}}" required class="form-control form-control-solid"
+                                                    name="contact_number" placeholder="Contact Number" />
                                             </div>
                                             <!--end::Input-->
                                         </div>
+                                        {% endif %}
                                     </div>
                                     <!--end::Input-->
 
@@ -104,7 +130,7 @@
                                             <!--begin::Input-->
                                             <div class="form-group">
                                                 <label>Email<span style="color:red;">*</span></label>
-                                                <input type="email" value="{{broker.user.email}}" required class="form-control form-control-solid" name="email" placeholder="Email" />
+                                                <input type="email" value="{{tenant.user.email}}" required class="form-control form-control-solid" name="email" placeholder="Email" />
                                             </div>
                                             <!--end::Input-->
                                         </div>
@@ -112,7 +138,7 @@
                                             <!--begin::Input-->
                                             <div class="form-group">
                                                 <label>Username<span style="color:red;">*</span></label>
-                                                <input type="text" required class="form-control form-control-solid" value="{{broker.user.username}}" name="username" placeholder="Username" />
+                                                <input type="text" required class="form-control form-control-solid" value="{{tenant.user.username}}" name="username" placeholder="Username" />
                                             </div>
                                             <!--end::Input-->
                                         </div>
@@ -123,17 +149,17 @@
                                         <div class="col-md-3">
                                             <!--begin::Input-->
                                             <div class="form-group">
-                                                <label>Country</label>
+                                                <label>Country<span style="color:red;">*</span></label>
                                                 <input type="text" required class="form-control form-control-solid"
-                                                    name="country" value="{{broker.country}}" placeholder="Country" />
+                                                    name="country" value="{{tenant.country}}" placeholder="Country" />
                                             </div>
                                             <!--end::Input-->
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>City</label>
+                                                <label>City<span style="color:red;">*</span></label>
                                                 <input type="text" required class="form-control form-control-solid"
-                                                    name="city" value="{{broker.city}}" placeholder="City"  />
+                                                    name="city" value="{{tenant.city}}" placeholder="City"  />
                                             </div>
                                             <!--end::Input-->
                                     </div>
@@ -141,7 +167,7 @@
                                         <div class="form-group">
                                             <label>State<span style="color:red;">*</span></label>
                                             <input type="text" required class="form-control form-control-solid" name="state" placeholder="State"
-                                                value="{{broker.state}}"  />
+                                                value="{{tenant.state}}"  />
                                         </div>
                                         <!--end::Input-->
                                     </div>
@@ -149,7 +175,7 @@
                                         <!--begin::Input-->
                                         <div class="form-group">
                                             <label>Address</label>
-                                            <input type="text" class="form-control form-control-solid" name="address" placeholder="Address" value="{{broker.address}}" />
+                                            <input type="text" class="form-control form-control-solid" name="address" placeholder="Address" value="{{tenant.address}}" />
                                         </div>
                                         <!--end::Input-->
                                     </div>
@@ -159,26 +185,26 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Lease Start Date<span style="color:red;">*</span></label>
-                                                <input type="date" class="form-control " required name="lease_start_date" value="{{broker.lease_start_date|date:'Y-m-d'}}" placeholder="LSD">
+                                                <input type="date" class="form-control " required name="lease_start_date" value="{{tenant.lease_start_date|date:'Y-m-d'}}" placeholder="LSD">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Lease End Date<span style="color:red;">*</span></label>
-                                                <input type="date" class="form-control " required name="lease_end_date" value="{{broker.lease_end_date|date:'Y-m-d'}}" placeholder="LED">
+                                                <input type="date" class="form-control " required name="lease_end_date" value="{{tenant.lease_end_date|date:'Y-m-d'}}" placeholder="LED">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Rent Amount<span style="color:red;">*</span></label>
-                                                <input type="number" required class="form-control form-control-solid"  name="rent_amount" value="{{broker.rent_amount}}"
+                                                <input type="number" required class="form-control form-control-solid"  name="rent_amount" value="{{tenant.rent_amount}}"
                                                     placeholder="Rent Amount">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Security Deposit<span style="color:red;">*</span></label>
-                                                <input type="number" required class="form-control form-control-solid" name="security_deposit" value="{{broker.security_deposit}}"
+                                                <input type="number" required class="form-control form-control-solid" name="security_deposit" value="{{tenant.security_deposit}}"
                                                     placeholder="Security Deposit">
                                             </div>
                                         </div>
@@ -188,14 +214,14 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Annual Income</label>
-                                                <input type="number" class="form-control form-control-solid" name="annual_income" value="{{broker.annual_income}}"
+                                                <input type="number" class="form-control form-control-solid" name="annual_income" value="{{tenant.annual_income}}"
                                                     placeholder="Annual Income">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                {% if broker.logo %}
-                                                <a href="">{{broker.logo.name}}</a>
+                                                {% if tenant.logo %}
+                                                <a href="">{{tenant.logo.name}}</a>
                                                 {% endif %} <br>
                                                 <label class="mr-4">Picture</label>
                                                 <input type="file" class="mt-" name="logo" value="">
@@ -203,17 +229,8 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                {% if broker.agreement_document %}
-                                                <a href="">{{broker.agreement_document.file.name}}</a>
-                                                {% endif %} <br>
-                                                <label class="mr-4">Document</label>
-                                                <input type="file" class="" name="agreement_document" value="">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
                                                 <label class="mr-4">Is Verified</label>
-                                                <input type="checkbox" class="mt-5" name="is_verified" {% if broker.is_verified %}checked{% endif %}>
+                                                <input type="checkbox" class="mt-5" name="is_verified" {% if tenant.is_verified %}checked{% endif %}>
                                             </div>
                                         </div>
                                     </div>
@@ -222,34 +239,57 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Payment History</label>
-                                            <textarea type="text-area" class="form-control" name="payment_history" rows="3">{{broker.payment_history}}</textarea>
+                                            <textarea type="text-area" class="form-control" name="payment_history" rows="3">{{tenant.payment_history}}</textarea>
                                         </div>
                                     </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Notes</label>
                                             <textarea type="text-area" class="form-control" name="notes"
-                                                rows="3">{{broker.notes}}</textarea>
+                                                rows="3">{{tenant.notes}}</textarea>
                                             </div>
                                         </div>
                                     </div>
-
+                                        
                                     <div class="container">
-                                        <div class="row">
-                                    
-                                            {% if broker.images.all %}
-                                            {% for image in broker.images.all %}
+                                        <h4>Images</h4>
+                                        <div class="row">                                            
+                                            {% if tenant.files.all %}
+                                            {% for image in tenant.files.all %}
+                                            {% if image.type == 'image' %}
                                             <div class="col-lg-3">
                                                 <div class="card text-center">
-                                                    <img src="{{ image.image.url }}" class="img-fluid" alt="Waterfall" >
+                                                    <img src="{{ image.file.url }}" class="img-fluid" alt="Waterfall" >
                                                     <input type="checkbox" name="remove_images" value="{{ image.id }}"> Remove
                                                     <div class="card-body">
                                                     </div>
                                                 </div>
                                             </div>
+                                            {% endif %}
                                             {% endfor %}
                                             {% else %}
-                                            <p>No images available for this broker.</p>
+                                            <p>No images available for this tenant.</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                    <div class="container">
+                                        <h4>Documents</h4>
+                                        <div class="row">
+                                            {% if tenant.files.all %}
+                                            {% for document in tenant.files.all %}
+                                            {% if document.type == 'document' %}
+                                            <div class="col-lg-3">
+                                                <div class="card text-center">
+                                                    <a href="{{ document.file.url }}" class="mt-4" download>{{ document.file.name }}</a>
+                                                    <input type="checkbox" name="remove_documents" value="{{ image.id }}"> Remove
+                                                    <hr>
+                                                </div>
+                                            </div>
+                                            {% endif %}
+                                            {% endfor %}
+                                            {% else %}
+                                            <p>No documents available for this tenant.</p>
                                             {% endif %}
                                         </div>
                                     </div>
@@ -259,46 +299,24 @@
                                            <div class="form-group">
                                             <label for="imageUpload">Upload Images</label>
                                             <input type="file" class="form-control-file" id="imageUpload" name="images"
-                                                accept="image/jpeg, image/png, image/gif, image/bmp" multiple>
+                                                 multiple>
                                             <div class="col-md-12">
                                                 <div id="imagePreview" class="c mt-3 d-flex    "></div> <!-- Container for image previews -->
                                             </div>
                                         </div>
-                                        <script>
-                                            document.getElementById('imageUpload').onchange = function (event) {
-                                                var output = document.getElementById('imagePreview');
-                                                output.innerHTML = '';
-                                                for (var i = 0; i < event.target.files.length; i++) {
-                                                    var file = event.target.files[i];
-                                                    var reader = new FileReader();
-                                                    reader.onload = function (e) {
-                                                        var img = document.createElement('img');
-                                                        img.src = e.target.result;
-                                                        img.className = 'img-thumbnail';
-                                                        var col = document.createElement('div');
-                                                        col.className = 'col-md-12 mb-3 ';
-                                                        col.appendChild(img);
-                                                        output.appendChild(col);
-                                                    }
-                                                    reader.readAsDataURL(file);
-                                                }
-                                            };
-                                        </script>
                                                 <ul id="imageUploads"></ul>
                                             </div>
                                         </div>
                                     </div>
-                            
-                            
+                            <div class="d-flex float-right">
+                                <div>
+                                    <button type="submit" class="btn btn-success font-weight-bolder text-uppercase">Submit</button>
+                                </div>
+                            </div>
                             
                                 </div>
                                 <!--end: Wizard Step 1-->
                                 <!--begin: Wizard Actions-->
-                                <div class="d-flex float-right">
-                                    <div>
-                                        <button type="submit" class="btn btn-success font-weight-bolder text-uppercase">Submit</button>
-                                    </div>
-                                </div>
                                 <!--end: Wizard Actions-->
                             </form>
                         </div>

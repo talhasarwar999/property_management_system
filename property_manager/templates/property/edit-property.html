@@ -240,16 +240,18 @@
                                     <div class="container">
                                         <div class="row">
                                     
-                                            {% if property.images.all %}
-                                            {% for image in property.images.all %}
+                                            {% if property.files.all %}
+                                            {% for image in property.files.all %}
+                                            {% if image.type == 'image'%}
                                             <div class="col-lg-3">
                                                 <div class="card text-center">
-                                                    <img src="{{ image.image.url }}" class="img-fluid" alt="Waterfall">
+                                                    <img src="{{ image.file.url }}" class="img-fluid" alt="Waterfall">
                                                     <input type="checkbox" name="remove_images" value="{{ image.id }}"> Remove
                                                     <div class="card-body">
                                                     </div>
                                                 </div>
                                             </div>
+                                            {% endif %}
                                             {% endfor %}
                                             {% else %}
                                             <p>No images available for this property.</p>
@@ -283,8 +285,9 @@
                                     <div class="container">
                                         <div class="row">
                                     
-                                            {% if property.documents.all %}
-                                            {% for document in property.documents.all %}
+                                            {% if property.files.all %}
+                                            {% for document in property.files.all %}
+                                            {% if document.type == 'document'%}
                                             <div class="col-lg-3">
                                                 <div class="card text-center">
                                                     <a href="{{ document.file.url }}" class="mt-4" download>{{ document.file.name }}</a>
@@ -293,6 +296,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            {% endif %}
                                             {% endfor %}
                                             {% else %}
                                             <p>No documents available for this property.</p>

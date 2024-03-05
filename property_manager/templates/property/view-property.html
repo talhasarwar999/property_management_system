@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends base_template %}
 {% block title %}Table{% endblock %}
 {% block content %}
 {% load static %}
@@ -56,8 +56,8 @@
                                     <b>Bathrooms</b> <a class="float-right">{{property.num_bathrooms}}</a>
                                 </li>
                             </ul>
-        <button  style="pointer-events: none;"class="btn btn-block {% if property.status %}btn-success{% else %}btn-danger{% endif %}" role="button">
-            <b>{% if property.status %}Available{% else %}Not Available{% endif %}</b>
+        <button  style="pointer-events: none;"class="btn btn-block {% if property.status == "available" %}btn-success{% else %}btn-danger{% endif %}" role="button">
+            <b>{% if property.status == "available" %}Available{% else %}Not Available{% endif %}</b>
         </button>
                         </div>
                         <!-- /.card-body -->

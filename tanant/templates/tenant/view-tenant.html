@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends base_template %}
 {% block title %}Table{% endblock %}
 {% block content %}
 {% load static %}
@@ -43,7 +43,7 @@
                                     <b>Email</b> <a class="float-right">{{tenant.user.email}}</a>
                                 </li>
                                 <li class="list-group-item">
-                                    <b>COntact</b> <a class="float-right">{{tenant.contact_number}}</a>
+                                    <b>Contact</b> <a class="float-right">{{tenant.contact_number}}</a>
                                 </li>
                                 <li class="list-group-item">
                                     <b>Country</b> <a class="float-right">{{tenant.country}}</a>
@@ -51,7 +51,7 @@
                             </ul>
                             <button style="pointer-events: none;"
                                 class="btn btn-block {% if tenant.is_verified %}btn-success{% else %}btn-danger{% endif %}" role="button">
-                                <b>{% if property.status %}True{% else %}False{% endif %}</b>
+                                <b>{% if tenant.is_verified %}True{% else %}False{% endif %}</b>
                             </button>
                         </div>
                         <!-- /.card-body -->

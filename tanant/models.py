@@ -1,15 +1,28 @@
 from django.db import models
 from django.conf import settings
+# from broker.models import Broker
 
+
+class TanantFile(models.Model):
+    file = models.FileField(upload_to='tanant_documents/')
+    description = models.TextField(blank=True, null=True)
+    type = models.CharField(max_length=255, choices=[('profile', 'Profile'), ('document', 'Document'), ('image', 'Image')])
 
 # Create your models here.
 class Tanant(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    STATUS_CHOICES = [
+        ('ON_RENT', 'On Rent'),
+        ('PENDING', 'Pending'),
+        ('APPROVED', 'Approved'),
+        ('REJECTED', 'Rejected'),
+    ]
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='tenant_user')
     property = models.ForeignKey('property_manager.property', on_delete=models.SET_NULL, blank=True, null=True)
-    name = models.CharField(max_length=255)
+    broker = models.ForeignKey('broker.broker', on_delete=models.SET_NULL, null=True, blank=True, related_name='broker_tenant_user')
+    name = models.CharField(max_length=255, unique=True)
     contact_number = models.CharField(max_length=15)
-    images = models.ManyToManyField('property_manager.Image')
-    agreement_document = models.OneToOneField('property_manager.Document', on_delete=models.CASCADE, blank=True, null=True)
+    files = models.ManyToManyField(TanantFile, related_name='tenant_files')
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='PENDING', blank=True, null=True)
     address = models.CharField(max_length=255, blank=True, null=True)
     city = models.CharField(max_length=100, blank=True, null=True)
     country = models.CharField(max_length=100, blank=True, null=True)
@@ -22,7 +35,7 @@ class Tanant(models.Model):
     annual_income = models.FloatField(blank=True, null=True)
     is_verified = models.BooleanField(default=False)
     notes = models.TextField(blank=True, null=True)
-    logo = models.ImageField(upload_to='tenant_logos/', blank=True, null=True)
+    created_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name

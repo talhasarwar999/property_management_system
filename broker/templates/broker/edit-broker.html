@@ -8,12 +8,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Edit Tenant</h1>
+                    <h1 class="m-0">Edit broker</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{% url 'property-manager-dashboard' %}">Home</a></li>
-                        <li class="breadcrumb-item active">Tenant</li>
+                        <li class="breadcrumb-item active">broker</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -59,30 +59,17 @@
                 <div class="col-lg-12">
                     <div class="card mb-4">
                         <div class="card-body">
-                            <form action="{% url 'edit-tenant' tenant.id %}" method="POST" class="form" id="kt_form" enctype="multipart/form-data">
+                            <form action="{% url 'edit-broker' broker.id %}" method="POST" class="form" id="kt_form" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 <!--begin: Wizard Step 1-->
                                 <div>
                                     <div class="row">
-                                        <div class="col-md-3">
-                                            <!--begin::Input-->
-                                            <div class="form-group">
-                                                <label>Property<span style="color:red;">*</span></label>
-                                                <select class="form-control form-control-solid" required name="property">
-                                                    <option value="">Select an option</option>
-                                                    {% for property in properties %}
-                                                    <option value="{{property.id}}" {% if tenant.property.id == property.id%}selected{%endif%}>{{property.title}}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                            <!--end::Input-->
-                                        </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-6">
                                             <!--begin::Input-->
                                             <div class="form-group">
                                                 <label>Name<span style="color:red;">*</span></label>
                                                 <input type="text" required class="form-control form-control-solid"
-                                                    name="name" value="{{tenant.name}}" placeholder="Name" />
+                                                    name="name" value="{{broker.name}}" placeholder="Name" />
                                             </div>
                                             <!--end::Input-->
                                         </div>
@@ -90,7 +77,7 @@
                                             <!--begin::Input-->
                                             <div class="form-group">
                                                 <label>Contact Number<span style="color:red;">*</span></label>
-                                                <input type="text" value="{{tenant.contact_number}}" required class="form-control form-control-solid" name="contact_number" placeholder="Contact Number" />
+                                                <input type="text" value="{{broker.contact_number}}" required class="form-control form-control-solid" name="contact_number" placeholder="Contact Number" />
                                             </div>
                                             <!--end::Input-->
                                         </div>
@@ -104,7 +91,7 @@
                                             <!--begin::Input-->
                                             <div class="form-group">
                                                 <label>Email<span style="color:red;">*</span></label>
-                                                <input type="email" value="{{tenant.user.email}}" required class="form-control form-control-solid" name="email" placeholder="Email" />
+                                                <input type="email" value="{{broker.user.email}}" required class="form-control form-control-solid" name="email" placeholder="Email" />
                                             </div>
                                             <!--end::Input-->
                                         </div>
@@ -112,7 +99,7 @@
                                             <!--begin::Input-->
                                             <div class="form-group">
                                                 <label>Username<span style="color:red;">*</span></label>
-                                                <input type="text" required class="form-control form-control-solid" value="{{tenant.user.username}}" name="username" placeholder="Username" />
+                                                <input type="text" required class="form-control form-control-solid" value="{{broker.user.username}}" name="username" placeholder="Username" />
                                             </div>
                                             <!--end::Input-->
                                         </div>
@@ -123,17 +110,17 @@
                                         <div class="col-md-3">
                                             <!--begin::Input-->
                                             <div class="form-group">
-                                                <label>Country<span style="color:red;">*</span></label>
+                                                <label>Country</label>
                                                 <input type="text" required class="form-control form-control-solid"
-                                                    name="country" value="{{tenant.country}}" placeholder="Country" />
+                                                    name="country" value="{{broker.country}}" placeholder="Country" />
                                             </div>
                                             <!--end::Input-->
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>City<span style="color:red;">*</span></label>
+                                                <label>City</label>
                                                 <input type="text" required class="form-control form-control-solid"
-                                                    name="city" value="{{tenant.city}}" placeholder="City"  />
+                                                    name="city" value="{{broker.city}}" placeholder="City"  />
                                             </div>
                                             <!--end::Input-->
                                     </div>
@@ -141,7 +128,7 @@
                                         <div class="form-group">
                                             <label>State<span style="color:red;">*</span></label>
                                             <input type="text" required class="form-control form-control-solid" name="state" placeholder="State"
-                                                value="{{tenant.state}}"  />
+                                                value="{{broker.state}}"  />
                                         </div>
                                         <!--end::Input-->
                                     </div>
@@ -149,62 +136,51 @@
                                         <!--begin::Input-->
                                         <div class="form-group">
                                             <label>Address</label>
-                                            <input type="text" class="form-control form-control-solid" name="address" placeholder="Address" value="{{tenant.address}}" />
+                                            <input type="text" class="form-control form-control-solid" name="address" placeholder="Address" value="{{broker.address}}" />
                                         </div>
                                         <!--end::Input-->
                                     </div>
                                     </div>
                                     <div class="row">
                             
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Lease Start Date<span style="color:red;">*</span></label>
-                                                <input type="date" class="form-control " required name="lease_start_date" value="{{tenant.lease_start_date|date:'Y-m-d'}}" placeholder="LSD">
-                                            </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>License Number<span style="color:red;">*</span></label>
+                                            <input type="text" required class="form-control form-control-solid" name="license_number" value="{{broker.license_number}}"
+                                                placeholder="License Number">
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Lease End Date<span style="color:red;">*</span></label>
-                                                <input type="date" class="form-control " required name="lease_end_date" value="{{tenant.lease_end_date|date:'Y-m-d'}}" placeholder="LED">
-                                            </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Company Name<span style="color:red;">*</span></label>
+                                            <input type="text" required class="form-control form-control-solid" name="company_name" value="{{broker.company_name}}"
+                                                placeholder="Company Name">
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Rent Amount<span style="color:red;">*</span></label>
-                                                <input type="number" required class="form-control form-control-solid"  name="rent_amount" value="{{tenant.rent_amount}}"
-                                                    placeholder="Rent Amount">
-                                            </div>
+                                    </div>
+                                    
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Years of Experience<span style="color:red;">*</span></label>
+                                            <input type="number" required class="form-control form-control-solid" name="years_of_experience" value="{{broker.years_of_experience}}"
+                                                placeholder="Years of Exp.">
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Security Deposit<span style="color:red;">*</span></label>
-                                                <input type="number" required class="form-control form-control-solid" name="security_deposit" value="{{tenant.security_deposit}}"
-                                                    placeholder="Security Deposit">
-                                            </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            {% if broker.logo %}
+                                            <a href="">{{broker.logo.name}}</a>
+                                            {% endif %} <br>
+                                            <label class="mr-4">Picture</label>
+                                            <input type="file" class="mt-" name="logo" value="">
                                         </div>
+                                    </div>
                                     </div>
                             
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Annual Income</label>
-                                                <input type="number" class="form-control form-control-solid" name="annual_income" value="{{tenant.annual_income}}"
-                                                    placeholder="Annual Income">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                {% if tenant.logo %}
-                                                <a href="">{{tenant.logo.name}}</a>
-                                                {% endif %} <br>
-                                                <label class="mr-4">Picture</label>
-                                                <input type="file" class="mt-" name="logo" value="">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                {% if tenant.agreement_document %}
-                                                <a href="">{{tenant.agreement_document.file.name}}</a>
+                                                {% if broker.agreement_document %}
+                                                <a href="">{{broker.agreement_document.file.name}}</a>
                                                 {% endif %} <br>
                                                 <label class="mr-4">Document</label>
                                                 <input type="file" class="" name="agreement_document" value="">
@@ -212,24 +188,25 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label class="mr-4">Is Verified</label>
-                                                <input type="checkbox" class="mt-5" name="is_verified" {% if tenant.is_verified %}checked{% endif %}>
+                                                <label class="mr-4">Accepting Clients?</label>
+                                                <input type="checkbox" class="mt-5" name="is_accepting_new_clients" {% if broker.is_accepting_new_clients %}checked{% endif %}>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Payment History</label>
+                                                <textarea type="text-area" class="form-control" name="payment_history"
+                                                    rows="3">{{broker.payment_history}}</textarea>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Payment History</label>
-                                            <textarea type="text-area" class="form-control" name="payment_history" rows="3">{{tenant.payment_history}}</textarea>
-                                        </div>
-                                    </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Notes</label>
                                             <textarea type="text-area" class="form-control" name="notes"
-                                                rows="3">{{tenant.notes}}</textarea>
+                                                rows="3">{{broker.notes}}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -237,8 +214,8 @@
                                     <div class="container">
                                         <div class="row">
                                     
-                                            {% if tenant.images.all %}
-                                            {% for image in tenant.images.all %}
+                                            {% if broker.images.all %}
+                                            {% for image in broker.images.all %}
                                             <div class="col-lg-3">
                                                 <div class="card text-center">
                                                     <img src="{{ image.image.url }}" class="img-fluid" alt="Waterfall" >
@@ -249,7 +226,7 @@
                                             </div>
                                             {% endfor %}
                                             {% else %}
-                                            <p>No images available for this tenant.</p>
+                                            <p>No images available for this broker.</p>
                                             {% endif %}
                                         </div>
                                     </div>
@@ -288,15 +265,17 @@
                                             </div>
                                         </div>
                                     </div>
-                            <div class="d-flex float-right">
-                                <div>
-                                    <button type="submit" class="btn btn-success font-weight-bolder text-uppercase">Submit</button>
-                                </div>
-                            </div>
+                            
+                            
                             
                                 </div>
                                 <!--end: Wizard Step 1-->
                                 <!--begin: Wizard Actions-->
+                                <div class="d-flex float-right">
+                                    <div>
+                                        <button type="submit" class="btn btn-success font-weight-bolder text-uppercase">Submit</button>
+                                    </div>
+                                </div>
                                 <!--end: Wizard Actions-->
                             </form>
                         </div>

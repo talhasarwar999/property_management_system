@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends base_template %}
 {% block title %}Table{% endblock %}
 {% block content %}
 {% load static %}
@@ -39,12 +39,6 @@
     </div>
     {% endif %}
     <script>
-        // Function to remove the notification element
-        //function removeNotification(element) {
-        //	element.parentElement.style.display = 'none';
-        //}
-
-        // Automatically remove notifications after 3 seconds
         setTimeout(function () {
             var notifications = document.querySelectorAll('.notification');
             notifications.forEach(function (notification) {
@@ -94,7 +88,8 @@
                                             </div>
                                             <!--end::Input-->
                                         </div>
-                                        <div class="col-md-6">
+                                        {% if request.user.is_property_dealer %}
+                                        <div class="col-md-3">
                                             <!--begin::Input-->
                                             <div class="form-group">
                                                 <label>Contact Number<span style="color:red;">*</span></label>
@@ -103,6 +98,31 @@
                                             </div>
                                             <!--end::Input-->
                                         </div>
+                                        <div class="col-md-3">
+                                            <!--begin::Input-->
+                                            <div class="form-group">
+                                        <label>Tenant Status<span style="color:red;">*</span></label>
+                                        <select class="form-control form-control-solid" required name="status">
+                                            <option value="">Select an option</option>
+                                            <option value="ON_RENT">On Rent</option>
+                                            <option value="PENDING">Pending</option>
+                                            <option value="APPROVED">Approved</option>
+                                            <option value="REJECTED">Rejected</option>
+                                        </select>
+                                        </div>
+                                        <!--end::Input-->
+                                        </div>
+                                        {% else %}
+                                        <div class="col-md-6">
+                                            <!--begin::Input-->
+                                            <div class="form-group">
+                                                <label>Contact Number<span style="color:red;">*</span></label>
+                                                <input type="text" required class="form-control form-control-solid" name="contact_number"
+                                                    placeholder="Contact Number" />
+                                            </div>
+                                            <!--end::Input-->
+                                        </div>
+                                        {% endif %}
                                     </div>
                                     <!--end::Input-->
 
@@ -232,12 +252,6 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label class="mr-4">Document</label>
-                                                <input type="file" class="" name="agreement_document" value="">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
                                                 <label class="mr-4">Is Verified</label>
                                                 <input type="checkbox" class="mt-5" name="is_verified" value="">
                                             </div>
@@ -267,7 +281,7 @@
                                             <div class="form-group">
                                                 <label for="imageUpload">Upload Images</label>
                                                 <input type="file" class="form-control-file" id="imageUpload" name="images"
-                                                    accept="image/jpeg, image/png, image/gif, image/bmp" multiple>
+                                                    multiple>
                                                 <div class="col-md-12">
                                                     <div id="imagePreview" class="c mt-3 d-flex    "></div> <!-- Container for image previews -->
                                                 </div>
