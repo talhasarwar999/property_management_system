@@ -227,7 +227,7 @@
                                 <div class="col-sm-9">
                                     {% if tenant.files.all %}
                                     {% for image in tenant.files.all %}
-                                    {% if image.type == 'profile' %}
+                                    {% if image.type == 'profile' and image.file.url %}
                                     <img src="{{ image.file.url }}" class="rounded-circle img-fluid" style="width: 150px;">
                                     {% endif %}
                                     {% endfor %}
@@ -267,7 +267,7 @@
                 
                 {% if tenant.files.all %}
                 {% for image in tenant.files.all %}
-                {% if image.type == 'image' %}
+                {% if image.type == 'image' and image.file.url %}
                 <div class="col-lg-3">
                     <div class="card text-center">
                         <img src="{{ image.file.url }}" class="card-img-top"
@@ -288,7 +288,7 @@
             <div class="row">
                 {% if tenant.files.all %}
                 {% for document in tenant.files.all %}
-                {% if document.type == 'document' %}
+                {% if document.type == 'document' and document.file.url %}
                 <div class="col-lg-3">
                     <div class="card text-center">
                         <a href="{{ document.file.url }}" class="mt-4" download>{{ document.file.name }}</a>

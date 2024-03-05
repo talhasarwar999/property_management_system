@@ -8,7 +8,7 @@ from .forms import BrokerForm, BrokerProfileUpdateForm
 from property_manager.forms import CustomPasswordChangeForm
 from tanant.models import Tanant
 from django.db.models import Q
-from .models import Broker
+from .models import Broker, BrokerFile
 from django.core.paginator import Paginator
 User = get_user_model()
 
@@ -140,21 +140,26 @@ def create_broker(request):
             user.is_broker = True
             user.save()
             broker_instance.user = user
-
-            # Handle Images
-            file = request.FILES.get('agreement_document')
-            file_instance = Document(file=file)
-            file_instance.save()
-            broker_instance.agreement_document = file_instance
             broker_instance.save()
 
+            # Handle Images
+            profile_picture = request.FILES.get('logo')
+            file_instance = BrokerFile(file=profile_picture, type='profile')
+            file_instance.save()
+            broker_instance.files.add(file_instance)
 
             # Handle Images
             images = request.FILES.getlist('images')
             for image in images:
-                image_instance = Image(image=image)
+                image_extensions = ('.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff', '.webp')
+                extension = image.name.lower().rsplit('.', 1)[-1] if '.' in image.name else ''
+                if extension in image_extensions:
+                    file_type = 'image'
+                else:
+                    file_type = 'document'
+                image_instance = BrokerFile(file=image, type=file_type)
                 image_instance.save()
-                broker_instance.images.add(image_instance)
+                broker_instance.files.add(image_instance)
             messages.success(request, "New Broker added successfully")
             return redirect("broker-list")
         else:
@@ -215,7 +220,6 @@ def edit_broker(request, pk):
 
     try:
         broker = Broker.objects.get(id=pk)
-        broker_document_agreement = broker.agreement_document
         broker_username = broker.user.username
     except:
         messages.error(request, "Broker ID does not exist")
@@ -226,23 +230,40 @@ def edit_broker(request, pk):
             instance = form.save(commit=False)
 
             remove_images = request.POST.getlist('remove_images')
-            for image_id in remove_images:
-                image = Image.objects.get(id=image_id)
-                image.delete()
+            for file_id in remove_images:
+                file = BrokerFile.objects.get(id=file_id)
+                file.delete()
 
-            file = request.FILES.get('agreement_document')
-            if 'agreement_document' in request.FILES:
-                file_instance = Document(file=file)
+            remove_documents = request.POST.getlist('remove_documents')
+            for file_id in remove_documents:
+                file = BrokerFile.objects.get(id=file_id)
+                file.delete()
+
+            profile_picture = request.FILES.get('logo')
+            file_instance = instance.files.filter(type='profile').exists()
+            remove_file_instance = instance.files.filter(type='profile')
+            if not file_instance:
+                file_instance = BrokerFile(file=profile_picture, type='profile')
                 file_instance.save()
-                instance.agreement_document = file_instance
+                instance.files.add(file_instance)
             else:
-                instance.agreement_document = broker_document_agreement
+                for file_instances in remove_file_instance:
+                    instance.files.remove(file_instances)
+                file_instance = BrokerFile(file=profile_picture, type='profile')
+                file_instance.save()
+                instance.files.add(file_instance)
 
             images = request.FILES.getlist('images')
             for image in images:
-                image_instance = Image(image=image)
+                image_extensions = ('jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'webp')
+                extension = image.name.lower().rsplit('.', 1)[-1] if '.' in image.name else ''
+                if extension in image_extensions:
+                    file_type = 'image'
+                else:
+                    file_type = 'document'
+                image_instance = BrokerFile(file=image, type=file_type)
                 image_instance.save()
-                instance.images.add(image_instance)
+                instance.files.add(image_instance)
 
             username = form.cleaned_data["username"]
             email = form.cleaned_data["email"]

@@ -177,9 +177,13 @@
                                     <p class="mb-0">Picture</p>
                                 </div>
                                 <div class="col-sm-9">
-                                    {% if broker.logo %}
-                                    <img src="{{ broker.logo.url }}" class="rounded-circle img-fluid" style="width: 150px;">
-                                    {% endif %}
+                                {% if broker.files.all %}
+                                {% for image in broker.files.all %}
+                                {% if image.type == 'profile' and image.file.url %}
+                                <img src="{{ image.file.url }}" class="rounded-circle img-fluid" style="width: 150px;">
+                                {% endif %}
+                                {% endfor %}
+                                {% endif %}
                                 </div>
                             </div>
                             <hr>
@@ -200,41 +204,45 @@
             </div></div>
            
             <div class="container">
-                <h4>Broker Images</h4>
-            <div class="row">
-                
-                {% if broker.images.all %}
-                {% for image in broker.images.all %}
-                <div class="col-lg-3">
-                    <div class="card text-center">
-                        <img src="{{ image.image.url }}" class="card-img-top"
-                            alt="Waterfall"  style="height: 250px;">
+                <h4>Broker Imagess</h4>
+                <div class="row">
+            
+                    {% if broker.files.all %}
+                    {% for image in broker.files.all %}
+                    {% if image.type == 'image' %}
+                    <div class="col-lg-3">
+                        <div class="card text-center">
+                            <img src="{{ image.file.url }}" class="card-img-top" alt="Waterfall" style="height: 250px;">
+                        </div>
                     </div>
+                    {% endif %}
+                    {% endfor %}
+                    {% else %}
+                    <p>No images available for this broker.</p>
+                    {% endif %}
                 </div>
-                {% endfor %}
-                {% else %}
-                <p>No images available for this broker.</p>
-                {% endif %}
-    </div>
-        </div>
-
-
-        <div class="container">
-            <h4>Broker Document</h4>
-            <div class="row">
-        
-                {% if broker.agreement_document and broker.agreement_document.file %}
-                <div class="col-lg-3">
-                    <div class="card text-center">
-                        <a href="{{ broker.agreement_document.file.url }}" class="mt-4" download>{{ broker.agreement_document.file.name }}</a>
-                        <hr>
-                    </div>
-                </div>
-                {% else %}
-                <p>No images available for this broker.</p>
-                {% endif %}
             </div>
-        </div>
+            
+            
+            <div class="container">
+                <h4>Broker Document</h4>
+                <div class="row">
+                    {% if broker.files.all %}
+                    {% for document in broker.files.all %}
+                    {% if document.type == 'document' %}
+                    <div class="col-lg-3">
+                        <div class="card text-center">
+                            <a href="{{ document.file.url }}" class="mt-4" download>{{ document.file.name }}</a>
+                            <hr>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                    {% else %}
+                    <p>No documents available for this broker.</p>
+                    {% endif %}
+                </div>
+            </div>
 
 </div>
 </section>

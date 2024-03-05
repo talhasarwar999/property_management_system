@@ -13,7 +13,7 @@ class BrokerForm(forms.ModelForm):
     class Meta:
         model = Broker
         fields = '__all__'
-        exclude = ['user', 'images']
+        exclude = ['user', 'files']
 
     def __init__(self, *args, **kwargs):
         instance = kwargs.get('instance', None)

@@ -98,12 +98,14 @@ def create_tenant(request):
             # Handle Images
             images = request.FILES.getlist('images')
             for image in images:
-                try:
-                    get_image_dimensions(image)
+                image_extensions = ('.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff', '.webp')
+                extension = image.name.lower().rsplit('.', 1)[-1] if '.' in image.name else ''
+                if extension in image_extensions:
                     file_type = 'image'
-                except:
+                else:
                     file_type = 'document'
                 image_instance = TanantFile(file=image, type=file_type)
+
                 image_instance.save()
                 tenant_instance.files.add(image_instance)
             messages.success(request, "New Tenant added successfully")
@@ -205,15 +207,23 @@ def edit_tenant(request, pk):
                 file = TanantFile.objects.get(id=file_id)
                 file.delete()
 
-            file = request.FILES.get('logo')
-            if 'logo' in request.FILES:
-                file_instance = TanantFile(file=file, type='profile')
+            profile_picture = request.FILES.get('logo')
+            file_instance = instance.files.filter(type='profile').exists()
+            remove_file_instance = instance.files.filter(type='profile')
+            if not file_instance:
+                file_instance = TanantFile(file=profile_picture, type='profile')
+                file_instance.save()
+                instance.files.add(file_instance)
+            else:
+                for file_instances in remove_file_instance:
+                    instance.files.remove(file_instances)
+                file_instance = TanantFile(file=profile_picture, type='profile')
                 file_instance.save()
                 instance.files.add(file_instance)
 
             images = request.FILES.getlist('images')
             for image in images:
-                image_extensions = ('.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff', '.webp')
+                image_extensions = ('jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'webp')
                 extension = image.name.lower().rsplit('.', 1)[-1] if '.' in image.name else ''
                 if extension in image_extensions:
                     file_type = 'image'
