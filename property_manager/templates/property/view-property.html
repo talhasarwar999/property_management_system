@@ -56,7 +56,9 @@
                                     <b>Bathrooms</b> <a class="float-right">{{property.num_bathrooms}}</a>
                                 </li>
                             </ul>
-                            <a href="#" style="pointer-events: none;" class="btn btn-primary btn-block"><b>{{property.status}}</b></a>
+        <button  style="pointer-events: none;"class="btn btn-block {% if property.status %}btn-success{% else %}btn-danger{% endif %}" role="button">
+            <b>{% if property.status %}Available{% else %}Not Available{% endif %}</b>
+        </button>
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -71,7 +73,7 @@
                     <div class="card">
                         <div class="card-header p-2">
                             <ul class="nav nav-pills">
-                                <li class="nav-item"><a class="nav-link active" href="#Property"
+                                <li class="nav-item"><a class="nav-link active" href="#AboutProperty"
                                         data-toggle="tab">About Property</a></li>
                                 <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Timeline</a>
                                 </li>
@@ -82,7 +84,7 @@
                         </div><!-- /.card-header -->
                         <div class="card-body">
                             <div class="tab-content">
-                            <div class="active tab-pane" id="About Property">
+                            <div class="active tab-pane" id="AboutProperty">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="card card-primary">
